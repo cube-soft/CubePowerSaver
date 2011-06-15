@@ -32,28 +32,30 @@
             this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.VersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this._FooterButtonsSplitContainer = new System.Windows.Forms.SplitContainer();
+            this._MainSplitContainer = new System.Windows.Forms.SplitContainer();
+            this._DummySplitContainer = new System.Windows.Forms.SplitContainer();
             this._ScheduleSplitContainer = new System.Windows.Forms.SplitContainer();
-            this._ScheduleControlSplitContainer = new System.Windows.Forms.SplitContainer();
             this.ScheduleListView = new System.Windows.Forms.ListView();
+            this._ScheduleControlSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.RecommendButton = new System.Windows.Forms.Button();
             this.CreateButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
-            this._DefaultSettingTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this._FooterSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SaveButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
-            this._DefaultSettingLabel = new System.Windows.Forms.Label();
-            this.DefaultSettingComboBox = new System.Windows.Forms.ComboBox();
             this.NavigationMenuStrip.SuspendLayout();
-            this._FooterButtonsSplitContainer.Panel1.SuspendLayout();
-            this._FooterButtonsSplitContainer.Panel2.SuspendLayout();
-            this._FooterButtonsSplitContainer.SuspendLayout();
+            this._MainSplitContainer.Panel1.SuspendLayout();
+            this._MainSplitContainer.Panel2.SuspendLayout();
+            this._MainSplitContainer.SuspendLayout();
+            this._DummySplitContainer.Panel1.SuspendLayout();
+            this._DummySplitContainer.SuspendLayout();
             this._ScheduleSplitContainer.Panel1.SuspendLayout();
             this._ScheduleSplitContainer.Panel2.SuspendLayout();
             this._ScheduleSplitContainer.SuspendLayout();
-            this._ScheduleControlSplitContainer.Panel1.SuspendLayout();
             this._ScheduleControlSplitContainer.Panel2.SuspendLayout();
             this._ScheduleControlSplitContainer.SuspendLayout();
-            this._DefaultSettingTableLayoutPanel.SuspendLayout();
+            this._FooterSplitContainer.Panel2.SuspendLayout();
+            this._FooterSplitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // NavigationMenuStrip
@@ -64,7 +66,7 @@
             this.HelpToolStripMenuItem});
             this.NavigationMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.NavigationMenuStrip.Name = "NavigationMenuStrip";
-            this.NavigationMenuStrip.Size = new System.Drawing.Size(492, 24);
+            this.NavigationMenuStrip.Size = new System.Drawing.Size(792, 24);
             this.NavigationMenuStrip.TabIndex = 0;
             this.NavigationMenuStrip.Text = "NavigationMenuStrip";
             // 
@@ -85,12 +87,14 @@
             this.ImportToolStripMenuItem.Name = "ImportToolStripMenuItem";
             this.ImportToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.ImportToolStripMenuItem.Text = "インポート(&O)";
+            this.ImportToolStripMenuItem.Click += new System.EventHandler(this.ImportToolStripMenuItem_Click);
             // 
             // ExportToolStripMenuItem
             // 
             this.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem";
             this.ExportToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.ExportToolStripMenuItem.Text = "エクスポート(&S)";
+            this.ExportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
             // FileToolStripSeparator
             // 
@@ -117,33 +121,53 @@
             this.VersionToolStripMenuItem.Name = "VersionToolStripMenuItem";
             this.VersionToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.VersionToolStripMenuItem.Text = "CubePowerSaver について(&A)";
+            this.VersionToolStripMenuItem.Click += new System.EventHandler(this.VersionToolStripMenuItem_Click);
             // 
-            // _FooterButtonsSplitContainer
+            // _MainSplitContainer
             // 
-            this._FooterButtonsSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._FooterButtonsSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this._FooterButtonsSplitContainer.IsSplitterFixed = true;
-            this._FooterButtonsSplitContainer.Location = new System.Drawing.Point(0, 24);
-            this._FooterButtonsSplitContainer.Name = "_FooterButtonsSplitContainer";
-            this._FooterButtonsSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this._MainSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._MainSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this._MainSplitContainer.IsSplitterFixed = true;
+            this._MainSplitContainer.Location = new System.Drawing.Point(0, 24);
+            this._MainSplitContainer.Name = "_MainSplitContainer";
+            this._MainSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // _FooterButtonsSplitContainer.Panel1
+            // _MainSplitContainer.Panel1
             // 
-            this._FooterButtonsSplitContainer.Panel1.Controls.Add(this._ScheduleSplitContainer);
+            this._MainSplitContainer.Panel1.Controls.Add(this._DummySplitContainer);
             // 
-            // _FooterButtonsSplitContainer.Panel2
+            // _MainSplitContainer.Panel2
             // 
-            this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.SaveButton);
-            this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.ExitButton);
-            this._FooterButtonsSplitContainer.Panel2MinSize = 30;
-            this._FooterButtonsSplitContainer.Size = new System.Drawing.Size(492, 342);
-            this._FooterButtonsSplitContainer.SplitterDistance = 311;
-            this._FooterButtonsSplitContainer.SplitterWidth = 1;
-            this._FooterButtonsSplitContainer.TabIndex = 1;
+            this._MainSplitContainer.Panel2.Controls.Add(this._FooterSplitContainer);
+            this._MainSplitContainer.Panel2MinSize = 30;
+            this._MainSplitContainer.Size = new System.Drawing.Size(792, 192);
+            this._MainSplitContainer.SplitterDistance = 161;
+            this._MainSplitContainer.SplitterWidth = 1;
+            this._MainSplitContainer.TabIndex = 1;
+            this._MainSplitContainer.TabStop = false;
+            // 
+            // _DummySplitContainer
+            // 
+            this._DummySplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this._DummySplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._DummySplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this._DummySplitContainer.IsSplitterFixed = true;
+            this._DummySplitContainer.Location = new System.Drawing.Point(0, 0);
+            this._DummySplitContainer.Name = "_DummySplitContainer";
+            this._DummySplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // _DummySplitContainer.Panel1
+            // 
+            this._DummySplitContainer.Panel1.Controls.Add(this._ScheduleSplitContainer);
+            this._DummySplitContainer.Panel2MinSize = 30;
+            this._DummySplitContainer.Size = new System.Drawing.Size(792, 161);
+            this._DummySplitContainer.SplitterDistance = 130;
+            this._DummySplitContainer.SplitterWidth = 1;
+            this._DummySplitContainer.TabIndex = 0;
+            this._DummySplitContainer.TabStop = false;
             // 
             // _ScheduleSplitContainer
             // 
-            this._ScheduleSplitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this._ScheduleSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this._ScheduleSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this._ScheduleSplitContainer.IsSplitterFixed = true;
@@ -153,39 +177,17 @@
             // 
             // _ScheduleSplitContainer.Panel1
             // 
-            this._ScheduleSplitContainer.Panel1.Controls.Add(this._ScheduleControlSplitContainer);
+            this._ScheduleSplitContainer.Panel1.Controls.Add(this.ScheduleListView);
             // 
             // _ScheduleSplitContainer.Panel2
             // 
-            this._ScheduleSplitContainer.Panel2.Controls.Add(this._DefaultSettingTableLayoutPanel);
+            this._ScheduleSplitContainer.Panel2.Controls.Add(this._ScheduleControlSplitContainer);
             this._ScheduleSplitContainer.Panel2MinSize = 30;
-            this._ScheduleSplitContainer.Size = new System.Drawing.Size(492, 311);
-            this._ScheduleSplitContainer.SplitterDistance = 280;
+            this._ScheduleSplitContainer.Size = new System.Drawing.Size(788, 126);
+            this._ScheduleSplitContainer.SplitterDistance = 95;
             this._ScheduleSplitContainer.SplitterWidth = 1;
             this._ScheduleSplitContainer.TabIndex = 0;
-            // 
-            // _ScheduleControlSplitContainer
-            // 
-            this._ScheduleControlSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._ScheduleControlSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this._ScheduleControlSplitContainer.IsSplitterFixed = true;
-            this._ScheduleControlSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this._ScheduleControlSplitContainer.Name = "_ScheduleControlSplitContainer";
-            this._ScheduleControlSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // _ScheduleControlSplitContainer.Panel1
-            // 
-            this._ScheduleControlSplitContainer.Panel1.Controls.Add(this.ScheduleListView);
-            // 
-            // _ScheduleControlSplitContainer.Panel2
-            // 
-            this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.CreateButton);
-            this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.DeleteButton);
-            this._ScheduleControlSplitContainer.Panel2MinSize = 30;
-            this._ScheduleControlSplitContainer.Size = new System.Drawing.Size(488, 276);
-            this._ScheduleControlSplitContainer.SplitterDistance = 245;
-            this._ScheduleControlSplitContainer.SplitterWidth = 1;
-            this._ScheduleControlSplitContainer.TabIndex = 0;
+            this._ScheduleSplitContainer.TabStop = false;
             // 
             // ScheduleListView
             // 
@@ -196,117 +198,132 @@
             this.ScheduleListView.Location = new System.Drawing.Point(0, 0);
             this.ScheduleListView.MultiSelect = false;
             this.ScheduleListView.Name = "ScheduleListView";
-            this.ScheduleListView.Size = new System.Drawing.Size(488, 245);
+            this.ScheduleListView.Size = new System.Drawing.Size(788, 95);
             this.ScheduleListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.ScheduleListView.TabIndex = 0;
             this.ScheduleListView.UseCompatibleStateImageBehavior = false;
             this.ScheduleListView.View = System.Windows.Forms.View.Details;
-            this.ScheduleListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ScheduleListView_MouseDoubleClick);
+            this.ScheduleListView.SelectedIndexChanged += new System.EventHandler(this.ScheduleListView_SelectedIndexChanged);
+            this.ScheduleListView.DoubleClick += new System.EventHandler(this.PropertyButton_Click);
+            // 
+            // _ScheduleControlSplitContainer
+            // 
+            this._ScheduleControlSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._ScheduleControlSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this._ScheduleControlSplitContainer.IsSplitterFixed = true;
+            this._ScheduleControlSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this._ScheduleControlSplitContainer.Name = "_ScheduleControlSplitContainer";
+            this._ScheduleControlSplitContainer.Panel1MinSize = 5;
+            // 
+            // _ScheduleControlSplitContainer.Panel2
+            // 
+            this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.RecommendButton);
+            this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.CreateButton);
+            this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.DeleteButton);
+            this._ScheduleControlSplitContainer.Size = new System.Drawing.Size(788, 30);
+            this._ScheduleControlSplitContainer.SplitterDistance = 232;
+            this._ScheduleControlSplitContainer.SplitterWidth = 1;
+            this._ScheduleControlSplitContainer.TabIndex = 0;
+            this._ScheduleControlSplitContainer.TabStop = false;
+            // 
+            // RecommendButton
+            // 
+            this.RecommendButton.Location = new System.Drawing.Point(445, 3);
+            this.RecommendButton.Name = "RecommendButton";
+            this.RecommendButton.Size = new System.Drawing.Size(100, 23);
+            this.RecommendButton.TabIndex = 7;
+            this.RecommendButton.Text = "推奨設定";
+            this.RecommendButton.UseVisualStyleBackColor = true;
             // 
             // CreateButton
             // 
-            this.CreateButton.Location = new System.Drawing.Point(229, 3);
+            this.CreateButton.Location = new System.Drawing.Point(183, 3);
             this.CreateButton.Name = "CreateButton";
             this.CreateButton.Size = new System.Drawing.Size(150, 23);
-            this.CreateButton.TabIndex = 1;
+            this.CreateButton.TabIndex = 6;
             this.CreateButton.Text = "新しいスケジュールを追加";
             this.CreateButton.UseVisualStyleBackColor = true;
             this.CreateButton.Click += new System.EventHandler(this.CreateButton_Click);
             // 
             // DeleteButton
             // 
-            this.DeleteButton.Location = new System.Drawing.Point(385, 3);
+            this.DeleteButton.Enabled = false;
+            this.DeleteButton.Location = new System.Drawing.Point(339, 3);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(100, 23);
-            this.DeleteButton.TabIndex = 0;
+            this.DeleteButton.TabIndex = 5;
             this.DeleteButton.Text = "削除";
             this.DeleteButton.UseVisualStyleBackColor = true;
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
-            // _DefaultSettingTableLayoutPanel
+            // _FooterSplitContainer
             // 
-            this._DefaultSettingTableLayoutPanel.ColumnCount = 2;
-            this._DefaultSettingTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this._DefaultSettingTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this._DefaultSettingTableLayoutPanel.Controls.Add(this._DefaultSettingLabel, 0, 0);
-            this._DefaultSettingTableLayoutPanel.Controls.Add(this.DefaultSettingComboBox, 1, 0);
-            this._DefaultSettingTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._DefaultSettingTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this._DefaultSettingTableLayoutPanel.Name = "_DefaultSettingTableLayoutPanel";
-            this._DefaultSettingTableLayoutPanel.RowCount = 1;
-            this._DefaultSettingTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this._DefaultSettingTableLayoutPanel.Size = new System.Drawing.Size(488, 26);
-            this._DefaultSettingTableLayoutPanel.TabIndex = 0;
+            this._FooterSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._FooterSplitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this._FooterSplitContainer.IsSplitterFixed = true;
+            this._FooterSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this._FooterSplitContainer.Name = "_FooterSplitContainer";
+            // 
+            // _FooterSplitContainer.Panel2
+            // 
+            this._FooterSplitContainer.Panel2.Controls.Add(this.SaveButton);
+            this._FooterSplitContainer.Panel2.Controls.Add(this.ExitButton);
+            this._FooterSplitContainer.Size = new System.Drawing.Size(792, 30);
+            this._FooterSplitContainer.SplitterDistance = 562;
+            this._FooterSplitContainer.SplitterWidth = 1;
+            this._FooterSplitContainer.TabIndex = 0;
+            this._FooterSplitContainer.TabStop = false;
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(283, 3);
+            this.SaveButton.Location = new System.Drawing.Point(11, 3);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(100, 23);
-            this.SaveButton.TabIndex = 0;
+            this.SaveButton.TabIndex = 5;
             this.SaveButton.Text = "OK";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // ExitButton
             // 
-            this.ExitButton.Location = new System.Drawing.Point(389, 3);
+            this.ExitButton.Location = new System.Drawing.Point(117, 3);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 23);
-            this.ExitButton.TabIndex = 1;
+            this.ExitButton.TabIndex = 4;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
-            // _DefaultSettingLabel
-            // 
-            this._DefaultSettingLabel.AutoSize = true;
-            this._DefaultSettingLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this._DefaultSettingLabel.Location = new System.Drawing.Point(3, 3);
-            this._DefaultSettingLabel.Margin = new System.Windows.Forms.Padding(3);
-            this._DefaultSettingLabel.Name = "_DefaultSettingLabel";
-            this._DefaultSettingLabel.Size = new System.Drawing.Size(76, 20);
-            this._DefaultSettingLabel.TabIndex = 0;
-            this._DefaultSettingLabel.Text = "その他の時間：";
-            this._DefaultSettingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // DefaultSettingComboBox
-            // 
-            this.DefaultSettingComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.DefaultSettingComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.DefaultSettingComboBox.FormattingEnabled = true;
-            this.DefaultSettingComboBox.Location = new System.Drawing.Point(153, 3);
-            this.DefaultSettingComboBox.Name = "DefaultSettingComboBox";
-            this.DefaultSettingComboBox.Size = new System.Drawing.Size(332, 20);
-            this.DefaultSettingComboBox.TabIndex = 1;
-            // 
             // MainForm
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(492, 366);
-            this.Controls.Add(this._FooterButtonsSplitContainer);
+            this.ClientSize = new System.Drawing.Size(792, 216);
+            this.Controls.Add(this._MainSplitContainer);
             this.Controls.Add(this.NavigationMenuStrip);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.NavigationMenuStrip;
-            this.MaximizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(600, 200);
             this.Name = "MainForm";
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "CubePowerSaver";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.MainForm_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.MainForm_DragEnter);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.NavigationMenuStrip.ResumeLayout(false);
             this.NavigationMenuStrip.PerformLayout();
-            this._FooterButtonsSplitContainer.Panel1.ResumeLayout(false);
-            this._FooterButtonsSplitContainer.Panel2.ResumeLayout(false);
-            this._FooterButtonsSplitContainer.ResumeLayout(false);
+            this._MainSplitContainer.Panel1.ResumeLayout(false);
+            this._MainSplitContainer.Panel2.ResumeLayout(false);
+            this._MainSplitContainer.ResumeLayout(false);
+            this._DummySplitContainer.Panel1.ResumeLayout(false);
+            this._DummySplitContainer.ResumeLayout(false);
             this._ScheduleSplitContainer.Panel1.ResumeLayout(false);
             this._ScheduleSplitContainer.Panel2.ResumeLayout(false);
             this._ScheduleSplitContainer.ResumeLayout(false);
-            this._ScheduleControlSplitContainer.Panel1.ResumeLayout(false);
             this._ScheduleControlSplitContainer.Panel2.ResumeLayout(false);
             this._ScheduleControlSplitContainer.ResumeLayout(false);
-            this._DefaultSettingTableLayoutPanel.ResumeLayout(false);
-            this._DefaultSettingTableLayoutPanel.PerformLayout();
+            this._FooterSplitContainer.Panel2.ResumeLayout(false);
+            this._FooterSplitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,14 +333,9 @@
 
         private System.Windows.Forms.MenuStrip NavigationMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
-        private System.Windows.Forms.SplitContainer _FooterButtonsSplitContainer;
-        private System.Windows.Forms.Button SaveButton;
-        private System.Windows.Forms.Button ExitButton;
+        private System.Windows.Forms.SplitContainer _MainSplitContainer;
+        private System.Windows.Forms.SplitContainer _DummySplitContainer;
         private System.Windows.Forms.SplitContainer _ScheduleSplitContainer;
-        private System.Windows.Forms.TableLayoutPanel _DefaultSettingTableLayoutPanel;
-        private System.Windows.Forms.SplitContainer _ScheduleControlSplitContainer;
-        private System.Windows.Forms.Button DeleteButton;
-        private System.Windows.Forms.Button CreateButton;
         private System.Windows.Forms.ListView ScheduleListView;
         private System.Windows.Forms.ToolStripMenuItem ImportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExportToolStripMenuItem;
@@ -331,8 +343,13 @@
         private System.Windows.Forms.ToolStripSeparator FileToolStripSeparator;
         private System.Windows.Forms.ToolStripMenuItem VersionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitToolStripMenuItem;
-        private System.Windows.Forms.Label _DefaultSettingLabel;
-        private System.Windows.Forms.ComboBox DefaultSettingComboBox;
+        private System.Windows.Forms.SplitContainer _ScheduleControlSplitContainer;
+        private System.Windows.Forms.Button CreateButton;
+        private System.Windows.Forms.Button DeleteButton;
+        private System.Windows.Forms.SplitContainer _FooterSplitContainer;
+        private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.Button ExitButton;
+        private System.Windows.Forms.Button RecommendButton;
     }
 }
 

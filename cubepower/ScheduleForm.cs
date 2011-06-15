@@ -35,15 +35,8 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// constructor
         /* ----------------------------------------------------------------- */
-        public ScheduleForm() {
-            this.Initialize();
-        }
-
-        /* ----------------------------------------------------------------- */
-        /// constructor
-        /* ----------------------------------------------------------------- */
-        public ScheduleForm(PowerScheme scheme) {
-            this._Scheme = scheme;
+        public ScheduleForm(IPowerScheme scheme) {
+            this._scheme = scheme;
             this.Initialize();
         }
 
@@ -61,7 +54,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         private void InitializeComboAppearance() {
             this.ResetProfileList();
-            this.ProfileComboBox.SelectedItem = this._Scheme.Active.Name;
+            this.ProfileComboBox.SelectedItem = this._scheme.Active.Name;
 
             // 電源設定
             this.MonitorComboBox.Items.Clear();
@@ -84,7 +77,7 @@ namespace CubePower {
                 this.HibernationComboBox.Items.Add(Appearance.ExpireTypeString(id));
             }
 
-            this.LoadSetting(this._Scheme.Active);
+            this.LoadProfile(this._scheme.Active);
         }
 
         #endregion // Initialize operations
@@ -111,11 +104,36 @@ namespace CubePower {
         }
 
         /* ----------------------------------------------------------------- */
+        /// DefaultSetting
+        /* ----------------------------------------------------------------- */
+        public bool DefaultSetting {
+            get { return this.DefaultSettingCheckBox.Checked; }
+            set { this.DefaultSettingCheckBox.Checked = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
         /// ProfileName
         /* ----------------------------------------------------------------- */
         public string ProfileName {
             get { return this.ProfileComboBox.SelectedItem as string; }
-            set { this.ProfileComboBox.SelectedItem = value; }
+            set {
+                if (this.ProfileComboBox.Items.Contains(value)) this.ProfileComboBox.SelectedItem = value;
+                else if (value == CUSTOM_PROFILE) {
+                    this.ProfileComboBox.Items.Add(value);
+                    this.ProfileComboBox.SelectedItem = value;
+                }
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// PowerSetting
+        /* ----------------------------------------------------------------- */
+        public PowerSetting PowerSetting {
+            get { return this._setting; }
+            set {
+                this._setting = value;
+                this.LoadSetting(this._setting);
+            }
         }
 
         #endregion // Properties
@@ -129,28 +147,9 @@ namespace CubePower {
         /// SaveButton_Click
         /* ----------------------------------------------------------------- */
         private void SaveButton_Click(object sender, EventArgs e) {
-            if (this._CustomizedItem != null) this.SaveProfile(this.FirstDateTimePicker.Text + "からの電源設定");
+            this.SaveSetting(this._setting);
             this.DialogResult = DialogResult.OK;
             this.Close();
-        }
-        
-        /* ----------------------------------------------------------------- */
-        /// SaveAsButton_Click
-        /* ----------------------------------------------------------------- */
-        private void SaveAsButton_Click(object sender, EventArgs e) {
-            if (this._CustomizedItem == null) return;
-            SaveProfileForm dialog = new SaveProfileForm();
-            dialog.ProfileName = this.FirstDateTimePicker.Text + "からの電源設定";
-            if (dialog.ShowDialog(this) == DialogResult.OK) this.SaveProfile(dialog.ProfileName);
-        }
-
-        /* ----------------------------------------------------------------- */
-        /// DeleteButton_Click
-        /* ----------------------------------------------------------------- */
-        private void DeleteButton_Click(object sender, EventArgs e) {
-            this._Scheme.Remove(this.ProfileComboBox.SelectedItem as string);
-            this.ResetProfileList();
-            this.ProfileComboBox.SelectedIndex = 0;
         }
         
         /* ----------------------------------------------------------------- */
@@ -168,10 +167,12 @@ namespace CubePower {
             ComboBox control = sender as ComboBox;
             if (control == null || !this._EnableComboEvents) return;
 
-            bool customize = this._CustomizedItem != null && this._CustomizedItem.Name == (string)control.SelectedItem;
-            PowerSchemeElement selected = customize ? this._CustomizedItem : this._Scheme.Find(control.SelectedItem as string);
-            this.LoadSetting(selected);
-            this.SaveAsButton.Enabled = customize;
+            string profile = control.SelectedItem as string;
+            if (profile != CUSTOM_PROFILE) {
+                PowerSchemeElement selected = this._scheme.Find(profile);
+                if (selected != null) this.LoadProfile(selected);
+            }
+            else this.LoadSetting(this._setting);
         }
 
         /* ----------------------------------------------------------------- */
@@ -180,8 +181,21 @@ namespace CubePower {
         private void DetailComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             ComboBox control = sender as ComboBox;
             if (control == null || !this._EnableComboEvents) return;
-            this.CustomizeProfile();
-            this.ProfileComboBox.SelectedItem = _CustomizedItem.Name;
+            this.SaveSetting(this._setting);
+            if (!this.ProfileComboBox.Items.Contains(CUSTOM_PROFILE)) {
+                this.ProfileComboBox.Items.Add(CUSTOM_PROFILE);
+            }
+            this.ProfileComboBox.SelectedIndex = this.ProfileComboBox.Items.Count - 1;
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// DefaultSettingCheckBox_CheckedChanged
+        /* ----------------------------------------------------------------- */
+        private void DefaultSettingCheckBox_CheckedChanged(object sender, EventArgs e) {
+            CheckBox control = sender as CheckBox;
+            if (control == null) return;
+            this.FirstDateTimePicker.Enabled = !control.Checked;
+            this.LastDateTimePicker.Enabled = !control.Checked;
         }
 
         #endregion // Event handlers
@@ -192,9 +206,9 @@ namespace CubePower {
         #region Other methods
 
         /* ----------------------------------------------------------------- */
-        /// LoadSetting
+        /// LoadProfile
         /* ----------------------------------------------------------------- */
-        private void LoadSetting(PowerSchemeElement src) {
+        private void LoadProfile(PowerSchemeElement src) {
             if (src == null) return;
 
             bool prev = this._EnableComboEvents;
@@ -206,56 +220,48 @@ namespace CubePower {
             this.StandByComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.Policy.user.IdleTimeoutAc));
             this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
-                Translator.SecondToExpireType(src.Policy.user.IdleTimeoutAc));
+                Translator.SecondToExpireType(src.Policy.mach.DozeS4TimeoutAc));
             this._EnableComboEvents = prev;
 
             this._DetailGroupBox.Text = "[" + src.Name + "] の電源設定";
         }
 
         /* ----------------------------------------------------------------- */
+        /// LoadSetting
+        /* ----------------------------------------------------------------- */
+        private void LoadSetting(PowerSetting src) {
+            if (src == null) return;
+
+            bool prev = this._EnableComboEvents;
+            this._EnableComboEvents = false;
+            this.MonitorComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
+                Translator.SecondToExpireType(src.MonitorTimeout));
+            this.DiskComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
+                Translator.SecondToExpireType(src.DiskTimeout));
+            this.StandByComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
+                Translator.SecondToExpireType(src.StandByTimeout));
+            this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
+                Translator.SecondToExpireType(src.HibernationTimeout));
+            this._EnableComboEvents = prev;
+
+            this.ProfileComboBox.SelectedIndex = this.ProfileComboBox.Items.Count - 1;
+            this._DetailGroupBox.Text = "[" + CUSTOM_PROFILE + "] の電源設定";
+        }
+
+        /* ----------------------------------------------------------------- */
         /// SaveSetting
         /* ----------------------------------------------------------------- */
-        private void SaveSetting(PowerSchemeElement dest) {
+        private void SaveSetting(PowerSetting dest) {
             if (dest == null) return;
 
-            POWER_POLICY policy = dest.Policy;
-            policy.user.VideoTimeoutAc = Translator.ExpireTypeToSecond(
+            dest.MonitorTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.MonitorComboBox.SelectedIndex));
-            policy.user.SpindownTimeoutAc = Translator.ExpireTypeToSecond(
+            dest.DiskTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.DiskComboBox.SelectedIndex));
-            policy.user.IdleTimeoutAc = Translator.ExpireTypeToSecond(
+            dest.StandByTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.StandByComboBox.SelectedIndex));
-            dest.Policy = policy;
-        }
-
-        /* ----------------------------------------------------------------- */
-        /// SaveProfile
-        /* ----------------------------------------------------------------- */
-        private void SaveProfile(string name) {
-            if (this._CustomizedItem == null) return;
-            this._CustomizedItem.Name = name;
-            this._Scheme.Add(this._CustomizedItem);
-            this.ResetProfileList();
-            this.ProfileComboBox.SelectedItem = this._CustomizedItem.Name;
-            this._CustomizedItem = null;
-        }
-
-        /* ----------------------------------------------------------------- */
-        /// CustomizeProfile
-        /* ----------------------------------------------------------------- */
-        private void CustomizeProfile() {
-            if (_CustomizedItem != null && _CustomizedItem.Name == (string)this.ProfileComboBox.SelectedItem) return;
-            PowerSchemeElement existed = this._Scheme.Find(this.ProfileComboBox.SelectedItem as string);
-            if (existed == null) return;
-
-            if (_CustomizedItem == null) {
-                _CustomizedItem = new PowerSchemeElement();
-                _CustomizedItem.Name = "カスタム";
-                this.ProfileComboBox.Items.Add(_CustomizedItem.Name);
-            }
-            _CustomizedItem.Policy = existed.Policy;
-            this.SaveSetting(_CustomizedItem);
-            this.SaveAsButton.Enabled = true;
+            dest.HibernationTimeout = Translator.ExpireTypeToSecond(
+                Translator.IndexToExpireType(this.HibernationComboBox.SelectedIndex));
         }
 
         /* ----------------------------------------------------------------- */
@@ -266,7 +272,7 @@ namespace CubePower {
             bool prev = this._EnableComboEvents;
             this._EnableComboEvents = false;
             this.ProfileComboBox.Items.Clear();
-            foreach (PowerSchemeElement item in this._Scheme.Elements) {
+            foreach (PowerSchemeElement item in this._scheme.Elements) {
                 this.ProfileComboBox.Items.Add(item.Name);
             }
             this._EnableComboEvents = prev;
@@ -279,9 +285,16 @@ namespace CubePower {
         //  メンバ変数
         /* ----------------------------------------------------------------- */
         #region Variables
-        private PowerScheme _Scheme;
-        private PowerSchemeElement _CustomizedItem;
+        private IPowerScheme _scheme;
+        private PowerSetting _setting = new PowerSetting();
         private bool _EnableComboEvents = false;
         #endregion // Variables
+
+        /* ----------------------------------------------------------------- */
+        //  定数
+        /* ----------------------------------------------------------------- */
+        #region Constant variables
+        private const string CUSTOM_PROFILE = "カスタム";
+        #endregion
     }
 }

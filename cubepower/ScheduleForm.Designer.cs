@@ -25,8 +25,6 @@
         private void InitializeComponent() {
             this._FooterButtonsSplitContainer = new System.Windows.Forms.SplitContainer();
             this._ProfileGroupBox = new System.Windows.Forms.GroupBox();
-            this.SaveAsButton = new System.Windows.Forms.Button();
-            this.DeleteButton = new System.Windows.Forms.Button();
             this.ProfileComboBox = new System.Windows.Forms.ComboBox();
             this._DetailGroupBox = new System.Windows.Forms.GroupBox();
             this.DetailTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -39,6 +37,7 @@
             this.StandByComboBox = new System.Windows.Forms.ComboBox();
             this.HibernationComboBox = new System.Windows.Forms.ComboBox();
             this._ScheduleGroupBox = new System.Windows.Forms.GroupBox();
+            this.DefaultSettingCheckBox = new System.Windows.Forms.CheckBox();
             this._ScheduleTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this._FirstTimeLabel = new System.Windows.Forms.Label();
             this._LastTimeLabel = new System.Windows.Forms.Label();
@@ -83,42 +82,19 @@
             // 
             // _ProfileGroupBox
             // 
-            this._ProfileGroupBox.Controls.Add(this.SaveAsButton);
-            this._ProfileGroupBox.Controls.Add(this.DeleteButton);
             this._ProfileGroupBox.Controls.Add(this.ProfileComboBox);
-            this._ProfileGroupBox.Location = new System.Drawing.Point(12, 94);
+            this._ProfileGroupBox.Location = new System.Drawing.Point(12, 116);
             this._ProfileGroupBox.Name = "_ProfileGroupBox";
-            this._ProfileGroupBox.Size = new System.Drawing.Size(428, 74);
+            this._ProfileGroupBox.Size = new System.Drawing.Size(428, 44);
             this._ProfileGroupBox.TabIndex = 2;
             this._ProfileGroupBox.TabStop = false;
             this._ProfileGroupBox.Text = "プロファイル";
-            // 
-            // SaveAsButton
-            // 
-            this.SaveAsButton.Enabled = false;
-            this.SaveAsButton.Location = new System.Drawing.Point(166, 44);
-            this.SaveAsButton.Name = "SaveAsButton";
-            this.SaveAsButton.Size = new System.Drawing.Size(150, 23);
-            this.SaveAsButton.TabIndex = 2;
-            this.SaveAsButton.Text = "名前を付けて保存";
-            this.SaveAsButton.UseVisualStyleBackColor = true;
-            this.SaveAsButton.Click += new System.EventHandler(this.SaveAsButton_Click);
-            // 
-            // DeleteButton
-            // 
-            this.DeleteButton.Location = new System.Drawing.Point(322, 44);
-            this.DeleteButton.Name = "DeleteButton";
-            this.DeleteButton.Size = new System.Drawing.Size(100, 23);
-            this.DeleteButton.TabIndex = 1;
-            this.DeleteButton.Text = "削除";
-            this.DeleteButton.UseVisualStyleBackColor = true;
-            this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // ProfileComboBox
             // 
             this.ProfileComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ProfileComboBox.FormattingEnabled = true;
-            this.ProfileComboBox.Location = new System.Drawing.Point(11, 18);
+            this.ProfileComboBox.Location = new System.Drawing.Point(8, 18);
             this.ProfileComboBox.Name = "ProfileComboBox";
             this.ProfileComboBox.Size = new System.Drawing.Size(411, 20);
             this.ProfileComboBox.TabIndex = 0;
@@ -127,7 +103,7 @@
             // _DetailGroupBox
             // 
             this._DetailGroupBox.Controls.Add(this.DetailTableLayoutPanel);
-            this._DetailGroupBox.Location = new System.Drawing.Point(12, 174);
+            this._DetailGroupBox.Location = new System.Drawing.Point(12, 166);
             this._DetailGroupBox.Name = "_DetailGroupBox";
             this._DetailGroupBox.Size = new System.Drawing.Size(428, 128);
             this._DetailGroupBox.TabIndex = 1;
@@ -251,13 +227,25 @@
             // 
             // _ScheduleGroupBox
             // 
+            this._ScheduleGroupBox.Controls.Add(this.DefaultSettingCheckBox);
             this._ScheduleGroupBox.Controls.Add(this._ScheduleTableLayoutPanel);
             this._ScheduleGroupBox.Location = new System.Drawing.Point(12, 12);
             this._ScheduleGroupBox.Name = "_ScheduleGroupBox";
-            this._ScheduleGroupBox.Size = new System.Drawing.Size(428, 76);
+            this._ScheduleGroupBox.Size = new System.Drawing.Size(428, 98);
             this._ScheduleGroupBox.TabIndex = 0;
             this._ScheduleGroupBox.TabStop = false;
             this._ScheduleGroupBox.Text = "スケジュール";
+            // 
+            // DefaultSettingCheckBox
+            // 
+            this.DefaultSettingCheckBox.AutoSize = true;
+            this.DefaultSettingCheckBox.Location = new System.Drawing.Point(8, 76);
+            this.DefaultSettingCheckBox.Name = "DefaultSettingCheckBox";
+            this.DefaultSettingCheckBox.Size = new System.Drawing.Size(123, 16);
+            this.DefaultSettingCheckBox.TabIndex = 1;
+            this.DefaultSettingCheckBox.Text = "その他の時間の設定";
+            this.DefaultSettingCheckBox.UseVisualStyleBackColor = true;
+            this.DefaultSettingCheckBox.CheckedChanged += new System.EventHandler(this.DefaultSettingCheckBox_CheckedChanged);
             // 
             // _ScheduleTableLayoutPanel
             // 
@@ -362,6 +350,7 @@
             this.DetailTableLayoutPanel.ResumeLayout(false);
             this.DetailTableLayoutPanel.PerformLayout();
             this._ScheduleGroupBox.ResumeLayout(false);
+            this._ScheduleGroupBox.PerformLayout();
             this._ScheduleTableLayoutPanel.ResumeLayout(false);
             this._ScheduleTableLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -384,7 +373,6 @@
         private System.Windows.Forms.Label _StandByLabel;
         private System.Windows.Forms.Label _HibernationLabel;
         private System.Windows.Forms.GroupBox _ProfileGroupBox;
-        private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.ComboBox ProfileComboBox;
         private System.Windows.Forms.ComboBox MonitorComboBox;
         private System.Windows.Forms.ComboBox DiskComboBox;
@@ -392,6 +380,6 @@
         private System.Windows.Forms.ComboBox HibernationComboBox;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button ExitButton;
-        private System.Windows.Forms.Button SaveAsButton;
+        private System.Windows.Forms.CheckBox DefaultSettingCheckBox;
     }
 }

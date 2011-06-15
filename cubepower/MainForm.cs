@@ -39,15 +39,14 @@ namespace CubePower {
         public MainForm() {
             InitializeComponent();
             
-            this.ResetProfileList();
+            this._DummySplitContainer.Panel2Collapsed = true;
             this.InitializeScheduleList();
             
             // TODO: 設定ファイルを置く場所は LocalApp\cubepower
             System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
             string dir = System.IO.Path.GetDirectoryName(exec.Location);
-            this._Setting.Load(dir + @"\cubepower.xml");
-            this.LoadSetting(this._Setting);
-            this.ValidateSchedule();
+            string path = dir + @"\cubepower.xml";
+            this.LoadSetting(path);
         }
 
         /* ----------------------------------------------------------------- */
@@ -55,24 +54,41 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         private void InitializeScheduleList() {
             ColumnHeader first = new ColumnHeader();
-            first.Text = "開始時刻";
+            first.Text = "時間";
             first.Width = 100;
             this.ScheduleListView.Columns.Add(first);
             
-            ColumnHeader last = new ColumnHeader();
-            last.Text = "終了時刻";
-            last.Width = 100;
-            this.ScheduleListView.Columns.Add(last);
-
             ColumnHeader name = new ColumnHeader();
-            name.Text = "プロファイル名";
-            name.Width = 280;
+            name.Text = "プロファイル";
+            name.Width = 150;
             this.ScheduleListView.Columns.Add(name);
+
+            ColumnHeader monitor = new ColumnHeader();
+            monitor.Text = "モニタの電源を切る";
+            monitor.Width = 120;
+            this.ScheduleListView.Columns.Add(monitor);
+
+            ColumnHeader disk = new ColumnHeader();
+            disk.Text = "ディスクの電源を切る";
+            disk.Width = 120;
+            this.ScheduleListView.Columns.Add(disk);
+
+            ColumnHeader standby = new ColumnHeader();
+            standby.Text = "システムスタンバイ";
+            standby.Width = 120;
+            this.ScheduleListView.Columns.Add(standby);
+
+            ColumnHeader hibernation = new ColumnHeader();
+            hibernation.Text = "システム休止状態";
+            hibernation.Width = 120;
+            this.ScheduleListView.Columns.Add(hibernation);
 
             // NOTE: アイコンがないと上下の余白が小さくなるのでダミーを設定する．
             ImageList dummy = new ImageList();
             dummy.ImageSize = new System.Drawing.Size(1, 16);
             this.ScheduleListView.SmallImageList = dummy;
+
+            this.CreateContextMenu();
         }
 
         #endregion // Initialize operations
@@ -93,37 +109,71 @@ namespace CubePower {
         ///
         /* ----------------------------------------------------------------- */
         private void ScheduleListView_MouseDoubleClick(object sender, MouseEventArgs e) {
-            ListView control = sender as ListView;
-            if (control == null || control.SelectedItems.Count <= 0) return;
-            
-            ScheduleForm dialog = new ScheduleForm(this._Setting.Scheme);
-            dialog.First = DateTime.Parse(control.SelectedItems[0].SubItems[0].Text);
-            dialog.Last  = DateTime.Parse(control.SelectedItems[0].SubItems[1].Text);
-            if (this._Setting.Scheme.Find(control.SelectedItems[0].SubItems[2].Text) != null) {
-                dialog.ProfileName = control.SelectedItems[0].SubItems[2].Text;
+            this.PropertyButton_Click(sender, e);
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// PropertyButton_Click
+        /* ----------------------------------------------------------------- */
+        private void PropertyButton_Click(object sender, EventArgs e) {
+            ListView control = this.ScheduleListView;
+            if (control.SelectedItems.Count <= 0) return;
+
+            ScheduleForm dialog = new ScheduleForm(this._setting.Scheme);
+            if (this._schedule.ContainsKey(control.SelectedItems[0].Text)) {
+                ScheduleItem item = this._schedule[control.SelectedItems[0].Text];
+                if (control.SelectedItems[0].Text == DEFAULT_SETTING_NAME) dialog.DefaultSetting = true;
+                else {
+                    dialog.First = item.First;
+                    dialog.Last = item.Last;
+                }
+                dialog.ProfileName = item.ProfileName;
+                if (item.ProfileName == CUSTOM_PROFILE) dialog.PowerSetting = item.ACValues;
             }
-            
+
             if (dialog.ShowDialog(this) == DialogResult.OK) {
-                control.SelectedItems[0].SubItems[0].Text = dialog.First.ToString("HH:mm");
-                control.SelectedItems[0].SubItems[1].Text = dialog.Last.ToString("HH:mm");
-                control.SelectedItems[0].SubItems[2].Text = dialog.ProfileName;
+                ScheduleItem item = this.CreateScheduleItem(dialog);
+                string key = dialog.DefaultSetting ? DEFAULT_SETTING_NAME : dialog.First.ToString(TIME_FORMAT) + " - " + dialog.Last.ToString(TIME_FORMAT);
+                ListViewItem row = null;
+                if (dialog.DefaultSetting) {
+                    foreach (ListViewItem pos in this.ScheduleListView.Items) {
+                        if (pos.Text == DEFAULT_SETTING_NAME) {
+                            row = pos;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    row = control.SelectedItems[0];
+                    this._schedule.Remove(control.SelectedItems[0].Text);
+                }
+                this.UpdateSchedule(key, item, row);
+                this._status = CloseStatus.Confirm;
             }
             dialog.Dispose();
-            this.ScheduleModified();
         }
 
         /* ----------------------------------------------------------------- */
         /// CreateButton_Click
         /* ----------------------------------------------------------------- */
         private void CreateButton_Click(object sender, EventArgs e) {
-            ScheduleForm dialog = new ScheduleForm(this._Setting.Scheme);
+            ScheduleForm dialog = new ScheduleForm(this._setting.Scheme);
             dialog.First = DateTime.Parse("00:00");
             dialog.Last  = DateTime.Parse("23:59");
             if (dialog.ShowDialog(this) == DialogResult.OK) {
-                this.AddSchedule(dialog.First, dialog.Last, dialog.ProfileName);
+                ScheduleItem item = this.CreateScheduleItem(dialog);
+                string key = dialog.DefaultSetting ? DEFAULT_SETTING_NAME : dialog.First.ToString(TIME_FORMAT) + " - " + dialog.Last.ToString(TIME_FORMAT);
+                ListViewItem row = null;
+                foreach (ListViewItem pos in this.ScheduleListView.Items) {
+                    if (key == pos.Text) {
+                        row = pos;
+                        break;
+                    }
+                }
+                this.UpdateSchedule(key, item, row);
+                this._status = CloseStatus.Confirm;
             }
             dialog.Dispose();
-            this.ScheduleModified();
         }
 
         /* ----------------------------------------------------------------- */
@@ -139,7 +189,11 @@ namespace CubePower {
             this.ScheduleListView.BeginUpdate();
             System.Collections.IEnumerator selected = this.ScheduleListView.SelectedItems.GetEnumerator();
             while (selected.MoveNext()) {
-                this.ScheduleListView.Items.Remove((ListViewItem)selected.Current);
+                ListViewItem item = selected.Current as ListViewItem;
+                if (item == null) continue;
+                this._schedule.Remove(item.Text);
+                this.ScheduleListView.Items.Remove(item);
+                this._status = CloseStatus.Confirm;
             }
             this.ScheduleListView.EndUpdate();
         }
@@ -148,19 +202,15 @@ namespace CubePower {
         /// SaveButton_Click
         /* ----------------------------------------------------------------- */
         private void SaveButton_Click(object sender, EventArgs e) {
-            if (this.ValidateSchedule()) {
-                this.Close();
-            }
-            else {
-                MessageBox.Show("不正な入力が存在します。入力を確認して下さい。",
-                    "入力エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            this._status = CloseStatus.Save;
+            this.Close();
         }
 
         /* ----------------------------------------------------------------- */
         /// ExitButton_Click
         /* ----------------------------------------------------------------- */
         private void ExitButton_Click(object sender, EventArgs e) {
+            this._status = CloseStatus.Cancel;
             this.Close();
         }
 
@@ -181,104 +231,229 @@ namespace CubePower {
         #endregion // Menu event handlers
 
         /* ----------------------------------------------------------------- */
+        //  その他のイベント・ハンドラ
+        /* ----------------------------------------------------------------- */
+        #region Other event handlers
+
+        /* ----------------------------------------------------------------- */
+        /// ImportToolStripMenuItem_Click
+        /* ----------------------------------------------------------------- */
+        private void ImportToolStripMenuItem_Click(object sender, EventArgs e) {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "XML ファイル (*.xml)|*.xml|すべてのファイル (*.*)|*.*";
+            dialog.CheckPathExists = true;
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                this.LoadSetting(dialog.FileName);
+                this._status = CloseStatus.Confirm;
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// ExportToolStripMenuItem_Click
+        /* ----------------------------------------------------------------- */
+        private void ExportToolStripMenuItem_Click(object sender, EventArgs e) {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.FileName = EXPORT_FILENAME;
+            dialog.Filter = "XML ファイル (*.xml)|*.xml|すべてのファイル (*.*)|*.*";
+            dialog.OverwritePrompt = true;
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                this.SaveSetting(dialog.FileName);
+            }
+        }
+
+        #endregion
+        
+        /* ----------------------------------------------------------------- */
         //  その他のメソッド
         /* ----------------------------------------------------------------- */
         #region Other methods
 
-        private void LoadSetting(UserSetting setting) {
+        /* ----------------------------------------------------------------- */
+        /// LoadSetting
+        /* ----------------------------------------------------------------- */
+        private void LoadSetting(string path) {
+            this._setting.Load(path);
             this.ScheduleListView.BeginUpdate();
             this.ScheduleListView.Items.Clear();
-            foreach (ScheduleItem item in setting.Schedule) {
-                this.AddSchedule(item.First, item.Last, item.ProfileName);
+            this._schedule.Clear();
+            this.AddSchedule(DEFAULT_SETTING_NAME, this._setting.DefaultSetting);
+            foreach (ScheduleItem item in this._setting.Schedule) {
+                string key = item.First.ToString(TIME_FORMAT) + " - " + item.Last.ToString(TIME_FORMAT);
+                this.AddSchedule(key, item);
             }
             this.ScheduleListView.EndUpdate();
-            this.DefaultSettingComboBox.SelectedItem = setting.DefaultSetting.ProfileName;
+            this.ValidateSchedule();
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// SaveSetting
+        /* ----------------------------------------------------------------- */
+        private void SaveSetting(string path) {
+            UserSetting setting = new UserSetting();
+            foreach (KeyValuePair<string, ScheduleItem> item in this._schedule) {
+                if (item.Key == DEFAULT_SETTING_NAME) setting.DefaultSetting = item.Value;
+                else setting.Schedule.Add(item.Value);
+            }
+            setting.Save(path);
         }
 
         /* ----------------------------------------------------------------- */
         /// AddSchedule
         /* ----------------------------------------------------------------- */
-        private void AddSchedule(DateTime first, DateTime last, string profile) {
+        private void AddSchedule(string key, ScheduleItem value) {
             ListViewItem item = new ListViewItem();
-            item.Text = first.ToString("HH:mm");
-            item.SubItems.Add(last.ToString("HH:mm"));
-            item.SubItems.Add(profile);
+            item.Text = key;
+            item.SubItems.Add(value.ProfileName);
+            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.MonitorTimeout)));
+            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout)));
+            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout)));
+            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout)));
             this.ScheduleListView.Items.Add(item);
+            this._schedule.Add(key, value);
+        }
+
+        private void UpdateSchedule(string key, ScheduleItem value, ListViewItem dest) {
+            if (dest == null) this.AddSchedule(key, value);
+            else {
+                if (this._schedule.ContainsKey(key)) this._schedule[key] = value;
+                else this._schedule.Add(key, value);
+                dest.Text = key;
+                dest.SubItems[1].Text = value.ProfileName;
+                dest.SubItems[2].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.MonitorTimeout));
+                dest.SubItems[3].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout));
+                dest.SubItems[4].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout));
+                dest.SubItems[5].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout));
+            }
         }
 
         /* ----------------------------------------------------------------- */
-        ///
         /// ValidateSchedule
-        ///
-        /// <summary>
-        /// スケジュールの開始時刻/終了時刻，プロファイル名の整合性を
-        /// チェックする．チェック項目は以下の通り．
-        /// 
-        /// 1. 開始時刻と終了時刻の整合性が取れているか．
-        ///    開始時刻が終了時刻よりも遅れている場合は赤色で表示．
-        ///    終了時刻が直後のスケジュールの開始時刻よりも遅れている場合は
-        ///    直後のスケジュールの開始時刻に設定する．
-        /// 2. 設定されているプロファイル名が存在するかどうか．
-        ///    ユーザが削除した等の理由で設定されているプロファイルが存在
-        ///    しない場合は赤色で表示．
-        /// </summary>
-        ///
         /* ----------------------------------------------------------------- */
         bool ValidateSchedule() {
             bool status = true;
-            for (int i = 0; i < this.ScheduleListView.Items.Count; ++i) {
-                DateTime first = DateTime.Parse(this.ScheduleListView.Items[i].SubItems[0].Text);
-                DateTime last = DateTime.Parse(this.ScheduleListView.Items[i].SubItems[1].Text);
-                if (i < this.ScheduleListView.Items.Count - 1) {
-                    DateTime next = DateTime.Parse(this.ScheduleListView.Items[i + 1].SubItems[0].Text);
-                    if (next < last) {
-                        last = next;
-                        this.ScheduleListView.Items[i].SubItems[1].Text = last.ToString("HH:mm");
-                    }
-                }
-
-                if (first >= last || this._Setting.Scheme.Find(this.ScheduleListView.Items[i].SubItems[2].Text) == null) {
-                    this.ScheduleListView.Items[i].BackColor = Color.FromArgb(255, 102, 102);
-                    status = false;
-                }
-                else this.ScheduleListView.Items[i].BackColor = SystemColors.Window;
-            }
             return status;
         }
 
-        /* ----------------------------------------------------------------- */
-        /// ScheduleModified
-        /* ----------------------------------------------------------------- */
-        void ScheduleModified() {
-            string selected = this.DefaultSettingComboBox.SelectedItem as string;
-            this.ResetProfileList();
-            if (this._Setting.Scheme.Find(selected) != null) this.DefaultSettingComboBox.SelectedItem = selected;
-            else this.DefaultSettingComboBox.SelectedIndex = 0;
-            this.ValidateSchedule();
+        private ScheduleItem CreateScheduleItem(ScheduleForm dialog) {
+            ScheduleItem dest = new ScheduleItem();
+            dest.First = dialog.First;
+            dest.Last = dialog.Last;
+            dest.ProfileName = dialog.ProfileName;
+            dest.ACValues = dialog.PowerSetting;
+            return dest;
         }
 
-        /* ----------------------------------------------------------------- */
-        /// ResetProfileList
-        /* ----------------------------------------------------------------- */
-        private void ResetProfileList() {
-            this.DefaultSettingComboBox.Items.Clear();
-            foreach (PowerSchemeElement elem in this._Setting.Scheme.Elements) {
-                this.DefaultSettingComboBox.Items.Add(elem.Name);
-            }
-            this.DefaultSettingComboBox.SelectedItem = this._Setting.Scheme.Active.Name;
+        private void CreateContextMenu() {
+            ContextMenuStrip context = new ContextMenuStrip();
+
+            ToolStripMenuItem create = new ToolStripMenuItem();
+            create.Text = "新しいスケジュールを追加";
+            create.Click += new EventHandler(CreateButton_Click);
+            context.Items.Add(create);
+
+            ToolStripMenuItem remove = new ToolStripMenuItem();
+            remove.Text = "削除";
+            remove.Click += new EventHandler(DeleteButton_Click);
+            context.Items.Add(remove);
+
+            context.Items.Add(new ToolStripSeparator());
+
+            ToolStripMenuItem property = new ToolStripMenuItem();
+            property.Text = "プロパティ";
+            property.Click += new EventHandler(PropertyButton_Click);
+            context.Items.Add(property);
+
+            this.ScheduleListView.ContextMenuStrip = context;
+        }
+
+        private void ExecScheduler() {
+            System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
+            string dir = System.IO.Path.GetDirectoryName(exec.Location);
+            string path = dir + @"\cubepower-scheduler.exe";
+            System.Diagnostics.Process proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = path;
+            proc.Start();
         }
 
         #endregion
 
         /* ----------------------------------------------------------------- */
-        //  変数定義
+        //  変数
+        /* ----------------------------------------------------------------- */
+        #region Constant variables
+        private const string CUSTOM_PROFILE = "カスタム";
+        private const string DEFAULT_SETTING_NAME = "その他の時間";
+        private const string TIME_FORMAT = "HH:mm";
+        private const string EXPORT_FILENAME = "CubePowerSaver の設定.xml";
+
+        private enum CloseStatus {
+            Confirm = 0,
+            Save,
+            Cancel
+        }
+        #endregion
+
+        /* ----------------------------------------------------------------- */
+        //  変数
         /* ----------------------------------------------------------------- */
         #region variables
-        private UserSetting _Setting = new UserSetting();
+        private UserSetting _setting = new UserSetting();
+        private Dictionary<string, ScheduleItem> _schedule = new Dictionary<string, ScheduleItem>();
+        private CloseStatus _status = CloseStatus.Cancel;
         #endregion
 
-        #region Constant variables
-        private static int PROFILE_COLUMN = 1;
-        #endregion
+        private void VersionToolStripMenuItem_Click(object sender, EventArgs e) {
+            VersionDialog dialog = new VersionDialog("0.1.1");
+            dialog.ShowDialog(this);
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            bool status = false;
+            if (this._status == CloseStatus.Confirm) {
+                if (MessageBox.Show("設定を保存しますか？", "設定の保存の確認", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) {
+                    status = true;
+                }
+            }
+            else if (this._status == CloseStatus.Save) status = true;
+
+            if (status) {
+                if (this.ValidateSchedule()) {
+                    System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
+                    string dir = System.IO.Path.GetDirectoryName(exec.Location);
+                    this.SaveSetting(dir + @"\cubepower.xml");
+                    this.ExecScheduler();
+                }
+                else {
+                    MessageBox.Show("不正な入力が存在します。入力を確認して下さい。",
+                        "入力エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    e.Cancel = true;
+                }
+            }
+            else this.ExecScheduler();
+        }
+
+        private void ScheduleListView_SelectedIndexChanged(object sender, EventArgs e) {
+            ListView control = sender as ListView;
+            if (control == null) return;
+
+            this.DeleteButton.Enabled = (control.SelectedItems.Count > 0);
+        }
+
+        private void MainForm_DragEnter(object sender, DragEventArgs e) {
+            e.Effect = DragDropEffects.All;
+        }
+
+        private void MainForm_DragDrop(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
+                foreach (string path in (string[])e.Data.GetData(DataFormats.FileDrop)) {
+                    if (MessageBox.Show(path + " から設定をインポートします。よろしいですか？", "設定のインポート", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) {
+                        this.LoadSetting(path);
+                        this._status = CloseStatus.Confirm;
+                    }
+                    break;
+                }
+            }
+        }
+
     }
 }
