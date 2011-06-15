@@ -177,6 +177,7 @@ namespace CubePower {
             try {
                 XmlDocument doc = new XmlDocument();
                 XmlDeclaration declr = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                
                 XmlElement root = doc.CreateElement(XML_ROOT);
 
                 doc.AppendChild(declr);

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
 // これらの属性値を変更してください。
-[assembly: AssemblyTitle("cubepower")]
+[assembly: AssemblyTitle("cubepower-scheduler")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CubeSoft")]
-[assembly: AssemblyProduct("cubepower")]
+[assembly: AssemblyProduct("cubepower-scheduler")]
 [assembly: AssemblyCopyright("Copyright © CubeSoft 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 次の GUID は、このプロジェクトが COM に公開される場合の、typelib の ID です
-[assembly: Guid("3e5c952c-ca18-42ba-a455-0d2222bc321c")]
+[assembly: Guid("6fe4b650-3196-49a0-b50b-7114f8e5fa39")]
 
 // アセンブリのバージョン情報は、以下の 4 つの値で構成されています:
 //
@@ -33,4 +33,4 @@ using System.Runtime.InteropServices;
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.1.2.0")]
-[assembly: AssemblyFileVersion("0.1.2.0")]
+[assembly: AssemblyFileVersion("0.2.2.0")]
