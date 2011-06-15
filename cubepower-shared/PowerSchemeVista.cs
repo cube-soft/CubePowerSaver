@@ -378,6 +378,8 @@ namespace CubePower {
         private static readonly Guid GUID_VIDEO_SUBGROUP        = new Guid("7516b95f-f776-4464-8c53-06167f40cc99");
         private static readonly Guid GUID_VIDEO_DIM             = new Guid("17aaa29b-8b43-4b94-aafe-35f64daaf1ee");
         private static readonly Guid GUID_VIDEO_TIMEOUT         = new Guid("3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e");
+        private static readonly Guid GUID_VIDEO_BRIGHTNESS      = new Guid("aded5e82-b909-4619-9949-f5d71dac0bcb");
+        private static readonly Guid GUID_VIDEO_DIM_BRIGHTNESS  = new Guid("f1fbfde2-a960-4165-9f88-50667911ce96");
 
         // ハードディスク関連
         private static readonly Guid GUID_DISK_SUBGROUP         = new Guid("0012ee47-9041-4b5d-9b77-535fba8b1442");

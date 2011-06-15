@@ -179,24 +179,24 @@ namespace CubePower {
         /// Name
         /* ----------------------------------------------------------------- */
         public string Name {
-            get { return name_; }
-            set { name_ = value; }
+            get { return _name; }
+            set { _name = value; }
         }
 
         /* ----------------------------------------------------------------- */
         /// Description
         /* ----------------------------------------------------------------- */
         public string Description {
-            get { return description_; }
-            set { description_ = value; }
+            get { return _description; }
+            set { _description = value; }
         }
 
         /* ----------------------------------------------------------------- */
         /// Policy
         /* ----------------------------------------------------------------- */
         public POWER_POLICY Policy {
-            get { return policy_; }
-            set { policy_ = value; }
+            get { return _policy; }
+            set { _policy = value; }
         }
 
         /* ----------------------------------------------------------------- */
@@ -207,18 +207,36 @@ namespace CubePower {
             set { _dim = value; }
         }
 
+        /* ----------------------------------------------------------------- */
+        /// Brightness
+        /* ----------------------------------------------------------------- */
+        public uint Brightness {
+            get { return _brightness; }
+            set { _brightness = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// DimBrightness
+        /* ----------------------------------------------------------------- */
+        public uint DimBrightness {
+            get { return _dim_brightness; }
+            set { _dim_brightness = value; }
+        }
+
         #endregion
 
         /* ----------------------------------------------------------------- */
         //  メンバ変数の定義
         /* ----------------------------------------------------------------- */
         #region variables
-        private string name_ = "";
-        private string description_ = "";
-        private POWER_POLICY policy_ = new POWER_POLICY();
+        private string _name = "";
+        private string _description = "";
+        private POWER_POLICY _policy = new POWER_POLICY();
 
         // extended
         private uint _dim = 0;
+        private uint _brightness = 0;
+        private uint _dim_brightness = 0;
 
         #endregion
     }

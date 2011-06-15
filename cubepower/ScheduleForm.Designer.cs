@@ -49,6 +49,10 @@
             this._ExtendTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this._DimLabel = new System.Windows.Forms.Label();
             this.DimComboBox = new System.Windows.Forms.ComboBox();
+            this._BrightnessLabel = new System.Windows.Forms.Label();
+            this._DimBrightnessLabel = new System.Windows.Forms.Label();
+            this.BrightnessNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.DimBrightnessNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this._FooterButtonsSplitContainer.Panel1.SuspendLayout();
             this._FooterButtonsSplitContainer.Panel2.SuspendLayout();
             this._FooterButtonsSplitContainer.SuspendLayout();
@@ -58,6 +62,8 @@
             this._ScheduleGroupBox.SuspendLayout();
             this._ScheduleTableLayoutPanel.SuspendLayout();
             this._ExtendTableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BrightnessNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DimBrightnessNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // _FooterButtonsSplitContainer
@@ -79,9 +85,9 @@
             // 
             this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.SaveButton);
             this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.ExitButton);
-            this._FooterButtonsSplitContainer.Panel2MinSize = 30;
-            this._FooterButtonsSplitContainer.Size = new System.Drawing.Size(452, 418);
-            this._FooterButtonsSplitContainer.SplitterDistance = 387;
+            this._FooterButtonsSplitContainer.Panel2MinSize = 40;
+            this._FooterButtonsSplitContainer.Size = new System.Drawing.Size(452, 448);
+            this._FooterButtonsSplitContainer.SplitterDistance = 407;
             this._FooterButtonsSplitContainer.SplitterWidth = 1;
             this._FooterButtonsSplitContainer.TabIndex = 0;
             // 
@@ -112,7 +118,7 @@
             this._DetailGroupBox.Controls.Add(this.DetailTableLayoutPanel);
             this._DetailGroupBox.Location = new System.Drawing.Point(12, 166);
             this._DetailGroupBox.Name = "_DetailGroupBox";
-            this._DetailGroupBox.Size = new System.Drawing.Size(428, 180);
+            this._DetailGroupBox.Size = new System.Drawing.Size(428, 230);
             this._DetailGroupBox.TabIndex = 1;
             this._DetailGroupBox.TabStop = false;
             this._DetailGroupBox.Text = "電源設定";
@@ -149,7 +155,7 @@
             this._MonitorLabel.Name = "_MonitorLabel";
             this._MonitorLabel.Size = new System.Drawing.Size(194, 20);
             this._MonitorLabel.TabIndex = 0;
-            this._MonitorLabel.Text = "モニタの電源を切る：";
+            this._MonitorLabel.Text = "ディスプレイの電源を切る：";
             this._MonitorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // _DiskLabel
@@ -319,7 +325,7 @@
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(234, 3);
+            this.SaveButton.Location = new System.Drawing.Point(234, 5);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(100, 23);
             this.SaveButton.TabIndex = 1;
@@ -329,7 +335,7 @@
             // 
             // ExitButton
             // 
-            this.ExitButton.Location = new System.Drawing.Point(340, 3);
+            this.ExitButton.Location = new System.Drawing.Point(340, 5);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 23);
             this.ExitButton.TabIndex = 0;
@@ -340,7 +346,7 @@
             // _ExtendLabel
             // 
             this._ExtendLabel.AutoSize = true;
-            this._ExtendLabel.Location = new System.Drawing.Point(9, 133);
+            this._ExtendLabel.Location = new System.Drawing.Point(6, 131);
             this._ExtendLabel.Name = "_ExtendLabel";
             this._ExtendLabel.Size = new System.Drawing.Size(294, 12);
             this._ExtendLabel.TabIndex = 4;
@@ -353,11 +359,17 @@
             this._ExtendTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this._ExtendTableLayoutPanel.Controls.Add(this._DimLabel, 0, 0);
             this._ExtendTableLayoutPanel.Controls.Add(this.DimComboBox, 1, 0);
-            this._ExtendTableLayoutPanel.Location = new System.Drawing.Point(6, 148);
+            this._ExtendTableLayoutPanel.Controls.Add(this._BrightnessLabel, 0, 1);
+            this._ExtendTableLayoutPanel.Controls.Add(this._DimBrightnessLabel, 0, 2);
+            this._ExtendTableLayoutPanel.Controls.Add(this.BrightnessNumericUpDown, 1, 1);
+            this._ExtendTableLayoutPanel.Controls.Add(this.DimBrightnessNumericUpDown, 1, 2);
+            this._ExtendTableLayoutPanel.Location = new System.Drawing.Point(6, 146);
             this._ExtendTableLayoutPanel.Name = "_ExtendTableLayoutPanel";
-            this._ExtendTableLayoutPanel.RowCount = 1;
-            this._ExtendTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this._ExtendTableLayoutPanel.Size = new System.Drawing.Size(416, 26);
+            this._ExtendTableLayoutPanel.RowCount = 3;
+            this._ExtendTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this._ExtendTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this._ExtendTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this._ExtendTableLayoutPanel.Size = new System.Drawing.Size(416, 78);
             this._ExtendTableLayoutPanel.TabIndex = 5;
             // 
             // _DimLabel
@@ -367,9 +379,9 @@
             this._DimLabel.Location = new System.Drawing.Point(3, 3);
             this._DimLabel.Margin = new System.Windows.Forms.Padding(3);
             this._DimLabel.Name = "_DimLabel";
-            this._DimLabel.Size = new System.Drawing.Size(77, 20);
+            this._DimLabel.Size = new System.Drawing.Size(110, 20);
             this._DimLabel.TabIndex = 0;
-            this._DimLabel.Text = "モニタを暗くする";
+            this._DimLabel.Text = "ディスプレイを暗くする：";
             this._DimLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // DimComboBox
@@ -382,11 +394,71 @@
             this.DimComboBox.TabIndex = 1;
             this.DimComboBox.SelectedIndexChanged += new System.EventHandler(this.DetailComboBox_SelectedIndexChanged);
             // 
+            // _BrightnessLabel
+            // 
+            this._BrightnessLabel.AutoSize = true;
+            this._BrightnessLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this._BrightnessLabel.Location = new System.Drawing.Point(3, 29);
+            this._BrightnessLabel.Margin = new System.Windows.Forms.Padding(3);
+            this._BrightnessLabel.Name = "_BrightnessLabel";
+            this._BrightnessLabel.Size = new System.Drawing.Size(103, 20);
+            this._BrightnessLabel.TabIndex = 2;
+            this._BrightnessLabel.Text = "ディスプレイの明るさ：";
+            this._BrightnessLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // _DimBrightnessLabel
+            // 
+            this._DimBrightnessLabel.AutoSize = true;
+            this._DimBrightnessLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this._DimBrightnessLabel.Location = new System.Drawing.Point(3, 55);
+            this._DimBrightnessLabel.Margin = new System.Windows.Forms.Padding(3);
+            this._DimBrightnessLabel.Name = "_DimBrightnessLabel";
+            this._DimBrightnessLabel.Size = new System.Drawing.Size(139, 20);
+            this._DimBrightnessLabel.TabIndex = 3;
+            this._DimBrightnessLabel.Text = "ディスプレイ暗転時の明るさ：";
+            this._DimBrightnessLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // BrightnessNumericUpDown
+            // 
+            this.BrightnessNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BrightnessNumericUpDown.Location = new System.Drawing.Point(203, 29);
+            this.BrightnessNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.BrightnessNumericUpDown.Name = "BrightnessNumericUpDown";
+            this.BrightnessNumericUpDown.Size = new System.Drawing.Size(210, 19);
+            this.BrightnessNumericUpDown.TabIndex = 4;
+            this.BrightnessNumericUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // DimBrightnessNumericUpDown
+            // 
+            this.DimBrightnessNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DimBrightnessNumericUpDown.Location = new System.Drawing.Point(203, 55);
+            this.DimBrightnessNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.DimBrightnessNumericUpDown.Name = "DimBrightnessNumericUpDown";
+            this.DimBrightnessNumericUpDown.Size = new System.Drawing.Size(210, 19);
+            this.DimBrightnessNumericUpDown.TabIndex = 5;
+            this.DimBrightnessNumericUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // ScheduleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(452, 418);
+            this.ClientSize = new System.Drawing.Size(452, 448);
             this.Controls.Add(this._FooterButtonsSplitContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -408,6 +480,8 @@
             this._ScheduleTableLayoutPanel.PerformLayout();
             this._ExtendTableLayoutPanel.ResumeLayout(false);
             this._ExtendTableLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.BrightnessNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DimBrightnessNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -440,5 +514,9 @@
         private System.Windows.Forms.Label _ExtendLabel;
         private System.Windows.Forms.Label _DimLabel;
         private System.Windows.Forms.ComboBox DimComboBox;
+        private System.Windows.Forms.Label _BrightnessLabel;
+        private System.Windows.Forms.Label _DimBrightnessLabel;
+        private System.Windows.Forms.NumericUpDown BrightnessNumericUpDown;
+        private System.Windows.Forms.NumericUpDown DimBrightnessNumericUpDown;
     }
 }

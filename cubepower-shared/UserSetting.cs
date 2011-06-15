@@ -72,6 +72,22 @@ namespace CubePower {
             set { this._dim = value; }
         }
 
+        /* ----------------------------------------------------------------- */
+        /// Brightness
+        /* ----------------------------------------------------------------- */
+        public uint Brightness {
+            get { return this._brightness; }
+            set { this._brightness = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// DimBrightness
+        /* ----------------------------------------------------------------- */
+        public uint DimBrightness {
+            get { return this._dim_brightness; }
+            set { this._dim_brightness = value; }
+        }
+
         #endregion // Properties
 
         /* ----------------------------------------------------------------- */
@@ -83,6 +99,8 @@ namespace CubePower {
         uint _standby = 0;
         uint _hibernation = 0;
         uint _dim = 0;
+        uint _brightness = 0;
+        uint _dim_brightness = 0;
         #endregion // Variables
     }
 
@@ -285,6 +303,8 @@ namespace CubePower {
                 else if (child.Name == XML_STANDBY_TIMEOUT && child.HasChildNodes) dest.StandByTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_HIBERNATION_TIMEOUT && child.HasChildNodes) dest.HibernationTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_DIM_TIMEOUT && child.HasChildNodes) dest.DimTimeout = UInt32.Parse(child.ChildNodes[0].Value);
+                else if (child.Name == XML_BRIGHTNESS && child.HasChildNodes) dest.Brightness = UInt32.Parse(child.ChildNodes[0].Value);
+                else if (child.Name == XML_DIM_BRIGHTNESS && child.HasChildNodes) dest.DimBrightness = UInt32.Parse(child.ChildNodes[0].Value);
             }
             return dest;
         }
@@ -341,6 +361,14 @@ namespace CubePower {
             dim.InnerText = item.DimTimeout.ToString();
             parent.AppendChild(dim);
 
+            XmlElement brightness = doc.CreateElement(XML_BRIGHTNESS);
+            brightness.InnerText = item.Brightness.ToString();
+            parent.AppendChild(brightness);
+
+            XmlElement dim_brightness = doc.CreateElement(XML_DIM_BRIGHTNESS);
+            dim_brightness.InnerText = item.DimBrightness.ToString();
+            parent.AppendChild(dim_brightness);
+
             root.AppendChild(parent);
         }
 
@@ -372,6 +400,9 @@ namespace CubePower {
         private const string XML_STANDBY_TIMEOUT        = "standby";
         private const string XML_HIBERNATION_TIMEOUT    = "hibernation";
         private const string XML_DIM_TIMEOUT            = "dim";
+        private const string XML_BRIGHTNESS             = "brightness";
+        private const string XML_DIM_BRIGHTNESS         = "dimbrightness";
+
         #endregion // Constant variables
     }
 }

@@ -64,8 +64,8 @@ namespace CubePower {
             this.ScheduleListView.Columns.Add(name);
 
             ColumnHeader monitor = new ColumnHeader();
-            monitor.Text = "モニタの電源を切る";
-            monitor.Width = 120;
+            monitor.Text = "ディスプレイの電源を切る";
+            monitor.Width = 140;
             this.ScheduleListView.Columns.Add(monitor);
 
             ColumnHeader disk = new ColumnHeader();
@@ -75,16 +75,16 @@ namespace CubePower {
 
             ColumnHeader standby = new ColumnHeader();
             standby.Text = "システムスタンバイ";
-            standby.Width = 120;
+            standby.Width = 110;
             this.ScheduleListView.Columns.Add(standby);
 
             ColumnHeader hibernation = new ColumnHeader();
             hibernation.Text = "システム休止状態";
-            hibernation.Width = 120;
+            hibernation.Width = 110;
             this.ScheduleListView.Columns.Add(hibernation);
 
             ColumnHeader dim = new ColumnHeader();
-            dim.Text = "モニタを暗くする";
+            dim.Text = "ディスプレイを暗くする";
             dim.Width = 120;
             this.ScheduleListView.Columns.Add(dim);
 
