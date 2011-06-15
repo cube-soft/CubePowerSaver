@@ -33,13 +33,11 @@
             this.VersionLabel = new System.Windows.Forms.Label();
             this.TitlePictureBox = new System.Windows.Forms.PictureBox();
             this.CubePDFLinkLabel = new System.Windows.Forms.LinkLabel();
-            this.LogoPictureBox = new System.Windows.Forms.PictureBox();
             this.OKButton = new System.Windows.Forms.Button();
             this.MainSplitContainer.Panel1.SuspendLayout();
             this.MainSplitContainer.Panel2.SuspendLayout();
             this.MainSplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.TitlePictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // MainSplitContainer
@@ -58,13 +56,12 @@
             this.MainSplitContainer.Panel1.Controls.Add(this.VersionLabel);
             this.MainSplitContainer.Panel1.Controls.Add(this.TitlePictureBox);
             this.MainSplitContainer.Panel1.Controls.Add(this.CubePDFLinkLabel);
-            this.MainSplitContainer.Panel1.Controls.Add(this.LogoPictureBox);
             // 
             // MainSplitContainer.Panel2
             // 
             this.MainSplitContainer.Panel2.Controls.Add(this.OKButton);
-            this.MainSplitContainer.Size = new System.Drawing.Size(333, 163);
-            this.MainSplitContainer.SplitterDistance = 120;
+            this.MainSplitContainer.Size = new System.Drawing.Size(333, 168);
+            this.MainSplitContainer.SplitterDistance = 123;
             this.MainSplitContainer.SplitterWidth = 2;
             this.MainSplitContainer.TabIndex = 0;
             // 
@@ -72,7 +69,7 @@
             // 
             this.CopyrightLabel.AutoSize = true;
             this.CopyrightLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.CopyrightLabel.Location = new System.Drawing.Point(83, 64);
+            this.CopyrightLabel.Location = new System.Drawing.Point(84, 81);
             this.CopyrightLabel.Name = "CopyrightLabel";
             this.CopyrightLabel.Size = new System.Drawing.Size(153, 12);
             this.CopyrightLabel.TabIndex = 5;
@@ -82,40 +79,31 @@
             // 
             this.VersionLabel.AutoSize = true;
             this.VersionLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.VersionLabel.Location = new System.Drawing.Point(83, 52);
+            this.VersionLabel.Location = new System.Drawing.Point(113, 69);
             this.VersionLabel.Name = "VersionLabel";
-            this.VersionLabel.Size = new System.Drawing.Size(44, 12);
+            this.VersionLabel.Size = new System.Drawing.Size(102, 12);
             this.VersionLabel.TabIndex = 4;
-            this.VersionLabel.Text = "Version";
+            this.VersionLabel.Text = "Version: 1.0.0 (x86)";
             // 
             // TitlePictureBox
             // 
-            this.TitlePictureBox.Image = global::CubePower.Properties.Resources.title;
-            this.TitlePictureBox.Location = new System.Drawing.Point(83, 12);
+            this.TitlePictureBox.Image = global::CubePower.Properties.Resources.logo;
+            this.TitlePictureBox.Location = new System.Drawing.Point(45, 12);
             this.TitlePictureBox.Name = "TitlePictureBox";
-            this.TitlePictureBox.Size = new System.Drawing.Size(221, 48);
+            this.TitlePictureBox.Size = new System.Drawing.Size(240, 54);
             this.TitlePictureBox.TabIndex = 12;
             this.TitlePictureBox.TabStop = false;
             // 
             // CubePDFLinkLabel
             // 
             this.CubePDFLinkLabel.AutoSize = true;
-            this.CubePDFLinkLabel.Location = new System.Drawing.Point(71, 92);
+            this.CubePDFLinkLabel.Location = new System.Drawing.Point(70, 93);
             this.CubePDFLinkLabel.Name = "CubePDFLinkLabel";
             this.CubePDFLinkLabel.Size = new System.Drawing.Size(192, 12);
             this.CubePDFLinkLabel.TabIndex = 2;
             this.CubePDFLinkLabel.TabStop = true;
             this.CubePDFLinkLabel.Text = "http://www.cube-soft.jp/cubepower/";
             this.CubePDFLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.CubePDFLinkLabel_LinkClicked);
-            // 
-            // LogoPictureBox
-            // 
-            this.LogoPictureBox.Image = global::CubePower.Properties.Resources.logo;
-            this.LogoPictureBox.Location = new System.Drawing.Point(45, 22);
-            this.LogoPictureBox.Name = "LogoPictureBox";
-            this.LogoPictureBox.Size = new System.Drawing.Size(32, 42);
-            this.LogoPictureBox.TabIndex = 11;
-            this.LogoPictureBox.TabStop = false;
             // 
             // OKButton
             // 
@@ -131,7 +119,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(333, 163);
+            this.ClientSize = new System.Drawing.Size(333, 168);
             this.Controls.Add(this.MainSplitContainer);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -148,7 +136,6 @@
             this.MainSplitContainer.Panel2.ResumeLayout(false);
             this.MainSplitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.TitlePictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.LogoPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -159,7 +146,6 @@
         private System.Windows.Forms.LinkLabel CubePDFLinkLabel;
         private System.Windows.Forms.Label VersionLabel;
         private System.Windows.Forms.Label CopyrightLabel;
-        private System.Windows.Forms.PictureBox LogoPictureBox;
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.PictureBox TitlePictureBox;
 

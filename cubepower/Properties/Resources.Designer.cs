@@ -73,12 +73,5 @@ namespace CubePower.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        internal static System.Drawing.Bitmap title {
-            get {
-                object obj = ResourceManager.GetObject("title", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

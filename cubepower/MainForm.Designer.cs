@@ -221,7 +221,7 @@
             this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.CreateButton);
             this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.DeleteButton);
             this._ScheduleControlSplitContainer.Size = new System.Drawing.Size(788, 30);
-            this._ScheduleControlSplitContainer.SplitterDistance = 232;
+            this._ScheduleControlSplitContainer.SplitterDistance = 235;
             this._ScheduleControlSplitContainer.SplitterWidth = 1;
             this._ScheduleControlSplitContainer.TabIndex = 0;
             this._ScheduleControlSplitContainer.TabStop = false;
@@ -269,7 +269,7 @@
             this._FooterSplitContainer.Panel2.Controls.Add(this.SaveButton);
             this._FooterSplitContainer.Panel2.Controls.Add(this.ExitButton);
             this._FooterSplitContainer.Size = new System.Drawing.Size(792, 30);
-            this._FooterSplitContainer.SplitterDistance = 562;
+            this._FooterSplitContainer.SplitterDistance = 565;
             this._FooterSplitContainer.SplitterWidth = 1;
             this._FooterSplitContainer.TabIndex = 0;
             this._FooterSplitContainer.TabStop = false;

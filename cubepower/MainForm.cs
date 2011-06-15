@@ -370,9 +370,15 @@ namespace CubePower {
             System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
             string dir = System.IO.Path.GetDirectoryName(exec.Location);
             string path = dir + @"\cubepower-scheduler.exe";
-            System.Diagnostics.Process proc = new System.Diagnostics.Process();
-            proc.StartInfo.FileName = path;
-            proc.Start();
+            if (System.IO.File.Exists(path)) {
+                System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                proc.StartInfo.FileName = path;
+                proc.Start();
+            }
+            else {
+                MessageBox.Show("cubepower-scheduler.exe が見つかりませんでした。実行したディレクトリに cubepower-scheduler.exe が存在するかどうか確認して下さい。",
+                    "CubePowerSaver 実行エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #endregion
