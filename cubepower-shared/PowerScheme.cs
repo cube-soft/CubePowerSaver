@@ -214,6 +214,7 @@ namespace CubePower {
     /// IPowerScheme
     /* --------------------------------------------------------------------- */
     public interface IPowerScheme {
+        bool Update(PowerSchemeElement item);
         bool Add(PowerSchemeElement item);
         bool Remove(string name);
         PowerSchemeElement Find(string name);

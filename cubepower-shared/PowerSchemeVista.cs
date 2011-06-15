@@ -36,6 +36,26 @@ namespace CubePower {
         }
 
         /* ----------------------------------------------------------------- */
+        /// Update
+        /* ----------------------------------------------------------------- */
+        public bool Update(PowerSchemeElement item) {
+            if (this.Find(item.Name) == null) return this.Add(item);
+            foreach (KeyValuePair<Guid, PowerSchemeElement> elem in this._elements) {
+                if (elem.Value.Name == item.Name) {
+                    bool status = true;
+                    Guid scheme = elem.Key;
+                    status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_TIMEOUT, item.Policy.user.VideoTimeoutAc);
+                    status &= this.SetACValue(scheme, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
+                    status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT, item.Policy.user.IdleTimeoutAc);
+                    status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_HIBERNATION_TIMEOUT, item.Policy.mach.DozeS4TimeoutAc);
+
+                    return status;
+                }
+            }
+            return false;
+        }
+
+        /* ----------------------------------------------------------------- */
         /// Add
         /* ----------------------------------------------------------------- */
         public bool Add(PowerSchemeElement item) {
@@ -89,27 +109,6 @@ namespace CubePower {
             uint status = NativeMethods.PowerDeleteScheme(IntPtr.Zero, ref guid);
             if (status == 0) this._elements.Remove(guid);
             return status == 0;
-        }
-
-        /* ----------------------------------------------------------------- */
-        /// Update
-        /* ----------------------------------------------------------------- */
-        public bool Update(PowerSchemeElement item) {
-            if (this.Find(item.Name) == null) return this.Add(item);
-            foreach (KeyValuePair<Guid, PowerSchemeElement> elem in this._elements) {
-                if (elem.Value.Name == item.Name) {
-                    Guid scheme = elem.Key;
-
-                    bool status = true;
-                    status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_TIMEOUT, item.Policy.user.VideoTimeoutAc);
-                    status &= this.SetACValue(scheme, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
-                    status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT, item.Policy.user.IdleTimeoutAc);
-                    status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_HIBERNATION_TIMEOUT, item.Policy.mach.DozeS4TimeoutAc);
-
-                    return status;
-                }
-            }
-            return false;
         }
 
         /* ----------------------------------------------------------------- */

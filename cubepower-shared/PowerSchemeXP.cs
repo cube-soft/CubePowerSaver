@@ -35,6 +35,22 @@ namespace CubePower {
         }
 
         /* ----------------------------------------------------------------- */
+        /// Update
+        /* ----------------------------------------------------------------- */
+        public bool Update(PowerSchemeElement item) {
+            if (this.Find(item.Name) == null) return this.Add(item);
+
+            foreach (KeyValuePair<uint, PowerSchemeElement> elem in _Elements) {
+                if (elem.Value.Name == item.Name) {
+                    POWER_POLICY policy = item.Policy;
+                    uint index = elem.Key;
+                    return NativeMethods.WritePwrScheme(ref index, item.Name, item.Description, ref policy);
+                }
+            }
+            return false;
+        }
+
+        /* ----------------------------------------------------------------- */
         /// Add
         /* ----------------------------------------------------------------- */
         public bool Add(PowerSchemeElement item) {
