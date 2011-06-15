@@ -301,15 +301,17 @@ namespace CubePower {
         /// AddSchedule
         /* ----------------------------------------------------------------- */
         private void AddSchedule(string key, ScheduleItem value) {
-            ListViewItem item = new ListViewItem();
-            item.Text = key;
-            item.SubItems.Add(value.ProfileName);
-            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.MonitorTimeout)));
-            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout)));
-            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout)));
-            item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout)));
-            this.ScheduleListView.Items.Add(item);
-            this._schedule.Add(key, value);
+            if (!this._schedule.ContainsKey(key)) {
+                ListViewItem item = new ListViewItem();
+                item.Text = key;
+                item.SubItems.Add(value.ProfileName);
+                item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.MonitorTimeout)));
+                item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout)));
+                item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout)));
+                item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout)));
+                this.ScheduleListView.Items.Add(item);
+                this._schedule.Add(key, value);
+            }
         }
 
         private void UpdateSchedule(string key, ScheduleItem value, ListViewItem dest) {
@@ -329,9 +331,69 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// ValidateSchedule
         /* ----------------------------------------------------------------- */
-        bool ValidateSchedule() {
+        private bool ValidateSchedule() {
             bool status = true;
             return status;
+        }
+
+        private void RecommendSchedule() {
+            this.ScheduleListView.BeginUpdate();
+            this.ScheduleListView.Items.Clear();
+            this._schedule.Clear();
+
+            string key = null;
+
+            // デフォルトの設定
+            ScheduleItem sched = new ScheduleItem();
+            sched.First = DateTime.Parse("00:00");
+            sched.Last  = DateTime.Parse("23:59");
+            sched.ProfileName = "カスタム";
+            sched.ACValues.MonitorTimeout = 3600;
+            sched.ACValues.DiskTimeout = 3600;
+            sched.ACValues.StandByTimeout = 3600;
+            sched.ACValues.HibernationTimeout = 0;
+            this.AddSchedule(DEFAULT_SETTING_NAME, sched);
+
+            // 深夜の設定
+            sched = new ScheduleItem();
+            sched.First = DateTime.Parse("00:00");
+            sched.Last  = DateTime.Parse("8:00");
+            sched.ProfileName = "カスタム";
+            sched.ACValues.MonitorTimeout = 300;
+            sched.ACValues.DiskTimeout = 600;
+            sched.ACValues.StandByTimeout = 600;
+            sched.ACValues.HibernationTimeout = 0;
+            key = sched.First.ToString("HH:mm") + " - " + sched.Last.ToString("HH:mm");
+            this.AddSchedule(key, sched);
+
+            // お昼の設定
+            sched = new ScheduleItem();
+            sched.First = DateTime.Parse("12:00");
+            sched.Last = DateTime.Parse("13:00");
+            sched.ProfileName = "カスタム";
+            sched.ACValues.MonitorTimeout = 300;
+            sched.ACValues.DiskTimeout = 600;
+            sched.ACValues.StandByTimeout = 600;
+            sched.ACValues.HibernationTimeout = 0;
+            key = sched.First.ToString("HH:mm") + " - " + sched.Last.ToString("HH:mm");
+            this.AddSchedule(key, sched);
+
+            // 退社後の設定
+            sched = new ScheduleItem();
+            sched.First = DateTime.Parse("21:00");
+            sched.Last = DateTime.Parse("23:59");
+            sched.ProfileName = "カスタム";
+            sched.ACValues.MonitorTimeout = 300;
+            sched.ACValues.DiskTimeout = 600;
+            sched.ACValues.StandByTimeout = 600;
+            sched.ACValues.HibernationTimeout = 0;
+            key = sched.First.ToString("HH:mm") + " - " + sched.Last.ToString("HH:mm");
+            this.AddSchedule(key, sched);
+
+            this._status = CloseStatus.Confirm;
+
+            this.ScheduleListView.EndUpdate();
+            this.ValidateSchedule();
         }
 
         private ScheduleItem CreateScheduleItem(ScheduleForm dialog) {
@@ -459,6 +521,10 @@ namespace CubePower {
                     break;
                 }
             }
+        }
+
+        private void RecommendButton_Click(object sender, EventArgs e) {
+            this.RecommendSchedule();
         }
 
     }

@@ -14,7 +14,6 @@ namespace CubePower {
             this._worker = new BackgroundWorker();
             this._worker.WorkerSupportsCancellation = true;
             this._worker.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
-            this._worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
             this._worker.RunWorkerAsync();
         }
 
@@ -47,11 +46,6 @@ namespace CubePower {
         private void BackgroundWorker_DoWork(Object sender, DoWorkEventArgs e) {
             Scheduler sched = new Scheduler();
             sched.Execute();
-        }
-
-        private void BackgroundWorker_RunWorkerCompleted(Object sender, RunWorkerCompletedEventArgs e) {
-            // リスタート
-            this._worker.RunWorkerAsync();
         }
 
         private BackgroundWorker _worker;

@@ -61,9 +61,6 @@
             // NavigationMenuStrip
             // 
             this.NavigationMenuStrip.BackColor = System.Drawing.SystemColors.Control;
-            this.NavigationMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FileToolStripMenuItem,
-            this.HelpToolStripMenuItem});
             this.NavigationMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.NavigationMenuStrip.Name = "NavigationMenuStrip";
             this.NavigationMenuStrip.Size = new System.Drawing.Size(792, 24);
@@ -221,7 +218,7 @@
             this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.CreateButton);
             this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.DeleteButton);
             this._ScheduleControlSplitContainer.Size = new System.Drawing.Size(788, 30);
-            this._ScheduleControlSplitContainer.SplitterDistance = 235;
+            this._ScheduleControlSplitContainer.SplitterDistance = 238;
             this._ScheduleControlSplitContainer.SplitterWidth = 1;
             this._ScheduleControlSplitContainer.TabIndex = 0;
             this._ScheduleControlSplitContainer.TabStop = false;
@@ -234,6 +231,7 @@
             this.RecommendButton.TabIndex = 7;
             this.RecommendButton.Text = "推奨設定";
             this.RecommendButton.UseVisualStyleBackColor = true;
+            this.RecommendButton.Click += new System.EventHandler(this.RecommendButton_Click);
             // 
             // CreateButton
             // 
@@ -269,7 +267,7 @@
             this._FooterSplitContainer.Panel2.Controls.Add(this.SaveButton);
             this._FooterSplitContainer.Panel2.Controls.Add(this.ExitButton);
             this._FooterSplitContainer.Size = new System.Drawing.Size(792, 30);
-            this._FooterSplitContainer.SplitterDistance = 565;
+            this._FooterSplitContainer.SplitterDistance = 568;
             this._FooterSplitContainer.SplitterWidth = 1;
             this._FooterSplitContainer.TabIndex = 0;
             this._FooterSplitContainer.TabStop = false;
