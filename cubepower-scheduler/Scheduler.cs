@@ -22,7 +22,9 @@ namespace CubePower {
             
             // 実行時点で既に時間の過ぎているスケジュールを順に適用していく．
             while (index < setting.Schedule.Count && IsPassed(setting.Schedule[index].First)) {
-                this.Update(setting.Schedule[index]);
+                if (!IsPassed(setting.Schedule[index].Last)) {
+                    this.Update(setting.Schedule[index]);
+                }
                 index++;
             }
 
@@ -47,7 +49,7 @@ namespace CubePower {
         }
 
         private bool Update(ScheduleItem item) {
-            PowerSchemeItem elem = this._scheme.Active;
+            PowerSchemeItem elem = new PowerSchemeItem();
             elem.Name = CUBEPOWER_PROFILENAME;
             elem.Description = CUBEPOWER_DESCRIPTION;
             POWER_POLICY policy = elem.Policy;
@@ -61,7 +63,7 @@ namespace CubePower {
             if (this._scheme.Find(CUBEPOWER_PROFILENAME) == null) status &= this._scheme.Add(elem);
             else status &= this._scheme.Update(elem);
             status &= this._scheme.Activate(elem.Name);
-
+            
             return status;
         }
         

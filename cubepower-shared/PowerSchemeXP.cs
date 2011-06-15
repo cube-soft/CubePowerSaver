@@ -40,14 +40,23 @@ namespace CubePower {
         public bool Update(PowerSchemeItem item) {
             if (this.Find(item.Name) == null) return this.Add(item);
 
+            bool status = true;
             foreach (KeyValuePair<uint, PowerSchemeItem> elem in _Elements) {
                 if (elem.Value.Name == item.Name) {
-                    POWER_POLICY policy = item.Policy;
+                    POWER_POLICY policy = elem.Value.Policy;
+                    policy.user.VideoTimeoutAc = item.Policy.user.VideoTimeoutAc;
+                    policy.user.SpindownTimeoutAc = item.Policy.user.SpindownTimeoutAc;
+                    policy.user.IdleTimeoutAc = item.Policy.user.IdleTimeoutAc;
+                    policy.mach.DozeS4TimeoutAc = item.Policy.mach.DozeS4TimeoutAc;
+
                     uint index = elem.Key;
-                    return NativeMethods.WritePwrScheme(ref index, item.Name, item.Description, ref policy);
+                    status = NativeMethods.WritePwrScheme(ref index, item.Name, item.Description, ref policy);
+                    elem.Value.Policy = policy;
+                    break;
                 }
             }
-            return false;
+
+            return status;
         }
 
         /* ----------------------------------------------------------------- */
