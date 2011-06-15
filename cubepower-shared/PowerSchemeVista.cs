@@ -38,9 +38,9 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Update
         /* ----------------------------------------------------------------- */
-        public bool Update(PowerSchemeElement item) {
+        public bool Update(PowerSchemeItem item) {
             if (this.Find(item.Name) == null) return this.Add(item);
-            foreach (KeyValuePair<Guid, PowerSchemeElement> elem in this._elements) {
+            foreach (KeyValuePair<Guid, PowerSchemeItem> elem in this._elements) {
                 if (elem.Value.Name == item.Name) {
                     bool status = true;
                     Guid scheme = elem.Key;
@@ -58,7 +58,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Add
         /* ----------------------------------------------------------------- */
-        public bool Add(PowerSchemeElement item) {
+        public bool Add(PowerSchemeItem item) {
             if (item == null) return false;
 
             Guid active = Guid.Empty;
@@ -99,7 +99,7 @@ namespace CubePower {
             if (name == null) return false;
 
             Guid guid = Guid.Empty;
-            foreach (KeyValuePair<Guid, PowerSchemeElement> item in this._elements) {
+            foreach (KeyValuePair<Guid, PowerSchemeItem> item in this._elements) {
                 if (item.Value.Name == name) {
                     guid = item.Key;
                     break;
@@ -114,8 +114,8 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Find
         /* ----------------------------------------------------------------- */
-        public PowerSchemeElement Find(string name) {
-            foreach (KeyValuePair<Guid, PowerSchemeElement> elem in this._elements) {
+        public PowerSchemeItem Find(string name) {
+            foreach (KeyValuePair<Guid, PowerSchemeItem> elem in this._elements) {
                 if (elem.Value.Name == name) return elem.Value;
             }
             return null;
@@ -125,7 +125,7 @@ namespace CubePower {
         /// Activate
         /* ----------------------------------------------------------------- */
         public bool Activate(string name) {
-            foreach (KeyValuePair<Guid, PowerSchemeElement> elem in this._elements) {
+            foreach (KeyValuePair<Guid, PowerSchemeItem> elem in this._elements) {
                 if (elem.Value.Name == name) {
                     Guid scheme = elem.Key;
                     return NativeMethods.PowerSetActiveScheme(IntPtr.Zero, ref scheme) == 0;
@@ -142,10 +142,10 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Elements
         /* ----------------------------------------------------------------- */
-        public List<PowerSchemeElement> Elements {
+        public List<PowerSchemeItem> Elements {
             get {
-                List<PowerSchemeElement> dest = new List<PowerSchemeElement>();
-                foreach (KeyValuePair<Guid, PowerSchemeElement> elem in this._elements) dest.Add(elem.Value);
+                List<PowerSchemeItem> dest = new List<PowerSchemeItem>();
+                foreach (KeyValuePair<Guid, PowerSchemeItem> elem in this._elements) dest.Add(elem.Value);
                 return dest;
             }
         }
@@ -153,7 +153,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Active
         /* ----------------------------------------------------------------- */
-        public PowerSchemeElement Active {
+        public PowerSchemeItem Active {
             get {
                 Guid scheme = Guid.Empty;
                 IntPtr handle = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
@@ -186,7 +186,7 @@ namespace CubePower {
             uint size = (uint)Marshal.SizeOf(scheme);
 
             while (NativeMethods.PowerEnumerate(IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, NativeMethods.POWER_DATA_ACCESSOR.ACCESS_SCHEME, index, ref scheme, ref size) == 0) {
-                PowerSchemeElement item = new PowerSchemeElement();
+                PowerSchemeItem item = new PowerSchemeItem();
                 item.Name = this.GetProfileName(scheme);
 
                 POWER_POLICY policy = item.Policy;
@@ -397,7 +397,7 @@ namespace CubePower {
         //  メンバ変数
         /* ----------------------------------------------------------------- */
         #region Variables
-        private Dictionary<Guid, PowerSchemeElement> _elements = new Dictionary<Guid, PowerSchemeElement>();
+        private Dictionary<Guid, PowerSchemeItem> _elements = new Dictionary<Guid, PowerSchemeItem>();
         #endregion // Variables
     }
 }

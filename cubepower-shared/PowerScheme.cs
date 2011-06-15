@@ -168,9 +168,9 @@ namespace CubePower {
     }
 
     /* --------------------------------------------------------------------- */
-    /// PowerSchemeElement
+    /// PowerSchemeItem
     /* --------------------------------------------------------------------- */
-    public class PowerSchemeElement {
+    public class PowerSchemeItem {
         /* ----------------------------------------------------------------- */
         //  プロパティ
         /* ----------------------------------------------------------------- */
@@ -211,16 +211,35 @@ namespace CubePower {
     }
 
     /* --------------------------------------------------------------------- */
+    ///
+    /// IPowerSchemeItem
+    ///
+    /// <summary>
+    /// TODO: PowerSchemeElement を IPowerSchemeItem のインターフェースに
+    /// する．
+    /// </summary>
+    ///
+    /* --------------------------------------------------------------------- */
+    public interface IPowerSchemeItem {
+        string Name { get; set; }
+        string Description { get; set; }
+        uint MonitorTimeout { get; set; }
+        uint DiskTimeout { get; set; }
+        uint StandbyTimeout { get; set; }
+        uint HibernationTimeout { get; set; }
+    }
+
+    /* --------------------------------------------------------------------- */
     /// IPowerScheme
     /* --------------------------------------------------------------------- */
     public interface IPowerScheme {
-        bool Update(PowerSchemeElement item);
-        bool Add(PowerSchemeElement item);
+        bool Update(PowerSchemeItem item);
+        bool Add(PowerSchemeItem item);
         bool Remove(string name);
-        PowerSchemeElement Find(string name);
+        PowerSchemeItem Find(string name);
         bool Activate(string name);
 
-        List<PowerSchemeElement> Elements { get; }
-        PowerSchemeElement Active { get; }
+        List<PowerSchemeItem> Elements { get; }
+        PowerSchemeItem Active { get; }
     }
 }

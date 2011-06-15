@@ -37,10 +37,10 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Update
         /* ----------------------------------------------------------------- */
-        public bool Update(PowerSchemeElement item) {
+        public bool Update(PowerSchemeItem item) {
             if (this.Find(item.Name) == null) return this.Add(item);
 
-            foreach (KeyValuePair<uint, PowerSchemeElement> elem in _Elements) {
+            foreach (KeyValuePair<uint, PowerSchemeItem> elem in _Elements) {
                 if (elem.Value.Name == item.Name) {
                     POWER_POLICY policy = item.Policy;
                     uint index = elem.Key;
@@ -53,7 +53,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Add
         /* ----------------------------------------------------------------- */
-        public bool Add(PowerSchemeElement item) {
+        public bool Add(PowerSchemeItem item) {
             if (item == null) return false;
 
             uint index = 0;
@@ -74,7 +74,7 @@ namespace CubePower {
             if (name == null) return false;
 
             uint index = 0;
-            foreach (KeyValuePair<uint, PowerSchemeElement> item in _Elements) {
+            foreach (KeyValuePair<uint, PowerSchemeItem> item in _Elements) {
                 if (item.Value.Name == name) {
                     index = item.Key;
                     break;
@@ -89,8 +89,8 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Find
         /* ----------------------------------------------------------------- */
-        public PowerSchemeElement Find(string name) {
-            foreach (KeyValuePair<uint, PowerSchemeElement> elem in _Elements) {
+        public PowerSchemeItem Find(string name) {
+            foreach (KeyValuePair<uint, PowerSchemeItem> elem in _Elements) {
                 if (elem.Value.Name == name) return elem.Value;
             }
             return null;
@@ -100,7 +100,7 @@ namespace CubePower {
         /// Activate
         /* ----------------------------------------------------------------- */
         public bool Activate(string name) {
-            foreach (KeyValuePair<uint, PowerSchemeElement> elem in _Elements) {
+            foreach (KeyValuePair<uint, PowerSchemeItem> elem in _Elements) {
                 if (elem.Value.Name == name) {
                     return NativeMethods.SetActivePwrScheme((uint)elem.Key, IntPtr.Zero, IntPtr.Zero);
                 }
@@ -116,10 +116,10 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Elements
         /* ----------------------------------------------------------------- */
-        public List<PowerSchemeElement> Elements {
+        public List<PowerSchemeItem> Elements {
             get {
-                List<PowerSchemeElement> dest = new List<PowerSchemeElement>();
-                foreach (KeyValuePair<uint, PowerSchemeElement> elem in this._Elements) dest.Add(elem.Value);
+                List<PowerSchemeItem> dest = new List<PowerSchemeItem>();
+                foreach (KeyValuePair<uint, PowerSchemeItem> elem in this._Elements) dest.Add(elem.Value);
                 return dest;
             }
         }
@@ -127,7 +127,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// Active
         /* ----------------------------------------------------------------- */
-        public PowerSchemeElement Active {
+        public PowerSchemeItem Active {
             get {
                 uint index = 0;
                 NativeMethods.GetActivePwrScheme(ref index);
@@ -156,7 +156,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         #region variables
         private int _Count;
-        private Dictionary<uint, PowerSchemeElement> _Elements = new Dictionary<uint, PowerSchemeElement>();
+        private Dictionary<uint, PowerSchemeItem> _Elements = new Dictionary<uint, PowerSchemeItem>();
         #endregion
 
         /* ----------------------------------------------------------------- */
@@ -274,7 +274,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         private bool PwrSchemesEnumProcFunction(uint uiIndex, UInt32 dwName, [MarshalAs(UnmanagedType.LPWStr)] string sName, UInt32 dwDesc, [MarshalAs(UnmanagedType.LPWStr)] string sDesc, ref POWER_POLICY pp, int lParam) {
             _Count += 1;
-            PowerSchemeElement elem = new PowerSchemeElement();
+            PowerSchemeItem elem = new PowerSchemeItem();
             elem.Name = sName;
             elem.Description = sDesc;
             elem.Policy = pp;

@@ -169,7 +169,7 @@ namespace CubePower {
 
             string profile = control.SelectedItem as string;
             if (profile != CUSTOM_PROFILE) {
-                PowerSchemeElement selected = this._scheme.Find(profile);
+                PowerSchemeItem selected = this._scheme.Find(profile);
                 if (selected != null) this.LoadProfile(selected);
             }
             else this.LoadSetting(this._setting);
@@ -208,7 +208,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         /// LoadProfile
         /* ----------------------------------------------------------------- */
-        private void LoadProfile(PowerSchemeElement src) {
+        private void LoadProfile(PowerSchemeItem src) {
             if (src == null) return;
 
             bool prev = this._EnableComboEvents;
@@ -272,7 +272,7 @@ namespace CubePower {
             bool prev = this._EnableComboEvents;
             this._EnableComboEvents = false;
             this.ProfileComboBox.Items.Clear();
-            foreach (PowerSchemeElement item in this._scheme.Elements) {
+            foreach (PowerSchemeItem item in this._scheme.Elements) {
                 this.ProfileComboBox.Items.Add(item.Name);
             }
             this._EnableComboEvents = prev;
