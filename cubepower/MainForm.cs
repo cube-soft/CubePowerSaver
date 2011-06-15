@@ -311,6 +311,7 @@ namespace CubePower {
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout)));
                 this.ScheduleListView.Items.Add(item);
                 this._schedule.Add(key, value);
+                this.ValidateSchedule();
             }
         }
 
@@ -325,6 +326,7 @@ namespace CubePower {
                 dest.SubItems[3].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout));
                 dest.SubItems[4].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout));
                 dest.SubItems[5].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout));
+                this.ValidateSchedule();
             }
         }
 
@@ -333,6 +335,40 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         private bool ValidateSchedule() {
             bool status = true;
+
+            // 前回のチェック結果をリセットする．
+            foreach (ListViewItem item in this.ScheduleListView.Items) {
+                item.BackColor = System.Drawing.SystemColors.Window;
+            }
+
+            for (int i = 0; i < this.ScheduleListView.Items.Count; i++) {
+                bool row_status = true;
+                string key = this.ScheduleListView.Items[i].Text;
+                if (!this._schedule.ContainsKey(key)) row_status = false;
+                else {
+                    ScheduleItem sched = this._schedule[key];
+                    if (sched.ProfileName != CUSTOM_PROFILE && this._setting.Scheme.Find(sched.ProfileName) == null) {
+                        sched.ProfileName = CUSTOM_PROFILE;
+                        this.ScheduleListView.Items[i].SubItems[1].Text = CUSTOM_PROFILE;
+                    }
+
+                    if (key != DEFAULT_SETTING_NAME) {
+                        for (int j = i + 1; j < this.ScheduleListView.Items.Count; j++) {
+                            if (this.ScheduleListView.Items[j].Text == DEFAULT_SETTING_NAME) continue;
+                            if (!this._schedule.ContainsKey(this.ScheduleListView.Items[j].Text)) continue;
+                            ScheduleItem compared = this._schedule[this.ScheduleListView.Items[j].Text];
+                            if (sched.Last > compared.First) {
+                                this.ScheduleListView.Items[j].BackColor = System.Drawing.Color.FromArgb(ERROR_COLOR);
+                                row_status = false;
+                            }
+                        }
+                    }
+                }
+
+                if (!row_status) this.ScheduleListView.Items[i].BackColor = System.Drawing.Color.FromArgb(ERROR_COLOR);
+                status &= row_status;
+            }
+
             return status;
         }
 
@@ -453,7 +489,7 @@ namespace CubePower {
         private const string DEFAULT_SETTING_NAME = "その他の時間";
         private const string TIME_FORMAT = "HH:mm";
         private const string EXPORT_FILENAME = "CubePowerSaver の設定.xml";
-
+        private const int ERROR_COLOR = 0xff6666;
         private enum CloseStatus {
             Confirm = 0,
             Save,
