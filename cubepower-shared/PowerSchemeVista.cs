@@ -48,6 +48,9 @@ namespace CubePower {
                     status &= this.SetACValue(scheme, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
                     status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT, item.Policy.user.IdleTimeoutAc);
                     status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_HIBERNATION_TIMEOUT, item.Policy.mach.DozeS4TimeoutAc);
+                    status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT, item.DimTimeout);
+                    status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_BRIGHTNESS, item.Brightness);
+                    status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_BRIGHTNESS, item.DimBrightness);
 
                     return status;
                 }
@@ -77,6 +80,9 @@ namespace CubePower {
                 status &= this.SetACValue(dest, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
                 status &= this.SetACValue(dest, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT, item.Policy.user.IdleTimeoutAc);
                 status &= this.SetACValue(dest, GUID_SLEEP_SUBGROUP, GUID_HIBERNATION_TIMEOUT, item.Policy.mach.DozeS4TimeoutAc);
+                status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT, item.DimTimeout);
+                status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_BRIGHTNESS, item.Brightness);
+                status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_BRIGHTNESS, item.DimBrightness);
 
                 if (!status) {
                     NativeMethods.PowerDeleteScheme(IntPtr.Zero, ref dest);
@@ -195,6 +201,10 @@ namespace CubePower {
                 policy.user.IdleTimeoutAc = this.GetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT);
                 policy.mach.DozeS4TimeoutAc = this.GetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_HIBERNATION_TIMEOUT);
                 item.Policy = policy;
+
+                item.DimTimeout = this.GetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT);
+                item.Brightness = this.GetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_BRIGHTNESS);
+                item.DimBrightness = this.GetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_BRIGHTNESS);
 
                 this._elements.Add(scheme, item);
                 index++;
@@ -376,7 +386,7 @@ namespace CubePower {
 
         // ディスプレイ関連
         private static readonly Guid GUID_VIDEO_SUBGROUP        = new Guid("7516b95f-f776-4464-8c53-06167f40cc99");
-        private static readonly Guid GUID_VIDEO_DIM             = new Guid("17aaa29b-8b43-4b94-aafe-35f64daaf1ee");
+        private static readonly Guid GUID_VIDEO_DIM_TIMEOUT             = new Guid("17aaa29b-8b43-4b94-aafe-35f64daaf1ee");
         private static readonly Guid GUID_VIDEO_TIMEOUT         = new Guid("3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e");
         private static readonly Guid GUID_VIDEO_BRIGHTNESS      = new Guid("aded5e82-b909-4619-9949-f5d71dac0bcb");
         private static readonly Guid GUID_VIDEO_DIM_BRIGHTNESS  = new Guid("f1fbfde2-a960-4165-9f88-50667911ce96");

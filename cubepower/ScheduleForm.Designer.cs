@@ -387,6 +387,7 @@
             // DimComboBox
             // 
             this.DimComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DimComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DimComboBox.FormattingEnabled = true;
             this.DimComboBox.Location = new System.Drawing.Point(203, 3);
             this.DimComboBox.Name = "DimComboBox";
@@ -422,37 +423,17 @@
             // 
             this.BrightnessNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BrightnessNumericUpDown.Location = new System.Drawing.Point(203, 29);
-            this.BrightnessNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.BrightnessNumericUpDown.Name = "BrightnessNumericUpDown";
             this.BrightnessNumericUpDown.Size = new System.Drawing.Size(210, 19);
             this.BrightnessNumericUpDown.TabIndex = 4;
-            this.BrightnessNumericUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // DimBrightnessNumericUpDown
             // 
             this.DimBrightnessNumericUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DimBrightnessNumericUpDown.Location = new System.Drawing.Point(203, 55);
-            this.DimBrightnessNumericUpDown.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             this.DimBrightnessNumericUpDown.Name = "DimBrightnessNumericUpDown";
             this.DimBrightnessNumericUpDown.Size = new System.Drawing.Size(210, 19);
             this.DimBrightnessNumericUpDown.TabIndex = 5;
-            this.DimBrightnessNumericUpDown.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // ScheduleForm
             // 

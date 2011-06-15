@@ -226,6 +226,8 @@ namespace CubePower {
                 Translator.SecondToExpireType(src.Policy.mach.DozeS4TimeoutAc));
             this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.DimTimeout));
+            this.BrightnessNumericUpDown.Value = src.Brightness;
+            this.DimBrightnessNumericUpDown.Value = src.DimBrightness;
             this._EnableComboEvents = prev;
 
             this._DetailGroupBox.Text = "[" + src.Name + "] の電源設定";
@@ -249,6 +251,8 @@ namespace CubePower {
                 Translator.SecondToExpireType(src.HibernationTimeout));
             this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.DimTimeout));
+            this.BrightnessNumericUpDown.Value = src.Brightness;
+            this.DimBrightnessNumericUpDown.Value = src.DimBrightness;
             this._EnableComboEvents = prev;
 
             this.ProfileComboBox.SelectedIndex = this.ProfileComboBox.Items.Count - 1;
@@ -271,6 +275,8 @@ namespace CubePower {
                 Translator.IndexToExpireType(this.HibernationComboBox.SelectedIndex));
             dest.DimTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.DimComboBox.SelectedIndex));
+            dest.Brightness = (uint)this.BrightnessNumericUpDown.Value;
+            dest.DimBrightness = (uint)this.DimBrightnessNumericUpDown.Value;
         }
 
         /* ----------------------------------------------------------------- */

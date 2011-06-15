@@ -58,6 +58,9 @@ namespace CubePower {
             policy.user.IdleTimeoutAc = item.ACValues.StandByTimeout;
             policy.mach.DozeS4TimeoutAc = item.ACValues.HibernationTimeout;
             elem.Policy = policy;
+            elem.DimTimeout = item.ACValues.DimTimeout;
+            elem.Brightness = item.ACValues.Brightness;
+            elem.DimBrightness = item.ACValues.DimBrightness;
 
             bool status = true;
             if (this._scheme.Find(CUBEPOWER_PROFILENAME) == null) status &= this._scheme.Add(elem);
