@@ -64,6 +64,14 @@ namespace CubePower {
             set { this._hibernation = value; }
         }
 
+        /* ----------------------------------------------------------------- */
+        /// DimTimeout
+        /* ----------------------------------------------------------------- */
+        public uint DimTimeout {
+            get { return this._dim; }
+            set { this._dim = value; }
+        }
+
         #endregion // Properties
 
         /* ----------------------------------------------------------------- */
@@ -74,6 +82,7 @@ namespace CubePower {
         uint _disk = 0;
         uint _standby = 0;
         uint _hibernation = 0;
+        uint _dim = 0;
         #endregion // Variables
     }
 
@@ -147,6 +156,7 @@ namespace CubePower {
             this._default.ACValues.DiskTimeout = this._scheme.Active.Policy.user.SpindownTimeoutAc;
             this._default.ACValues.StandByTimeout = this._scheme.Active.Policy.user.IdleTimeoutAc;
             this._default.ACValues.HibernationTimeout = this._scheme.Active.Policy.mach.DozeS4TimeoutAc;
+            this._default.ACValues.DimTimeout = this._scheme.Active.DimTimeout;
         }
 
         /* ----------------------------------------------------------------- */
@@ -274,6 +284,7 @@ namespace CubePower {
                 else if (child.Name == XML_DISK_TIMEOUT && child.HasChildNodes) dest.DiskTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_STANDBY_TIMEOUT && child.HasChildNodes) dest.StandByTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_HIBERNATION_TIMEOUT && child.HasChildNodes) dest.HibernationTimeout = UInt32.Parse(child.ChildNodes[0].Value);
+                else if (child.Name == XML_DIM_TIMEOUT && child.HasChildNodes) dest.DimTimeout = UInt32.Parse(child.ChildNodes[0].Value);
             }
             return dest;
         }
@@ -326,6 +337,10 @@ namespace CubePower {
             hibernation.InnerText = item.HibernationTimeout.ToString();
             parent.AppendChild(hibernation);
 
+            XmlElement dim = doc.CreateElement(XML_DIM_TIMEOUT);
+            dim.InnerText = item.DimTimeout.ToString();
+            parent.AppendChild(dim);
+
             root.AppendChild(parent);
         }
 
@@ -356,6 +371,7 @@ namespace CubePower {
         private const string XML_DISK_TIMEOUT           = "disk";
         private const string XML_STANDBY_TIMEOUT        = "standby";
         private const string XML_HIBERNATION_TIMEOUT    = "hibernation";
+        private const string XML_DIM_TIMEOUT            = "dim";
         #endregion // Constant variables
     }
 }

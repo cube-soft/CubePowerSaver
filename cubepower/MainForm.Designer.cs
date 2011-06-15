@@ -30,6 +30,12 @@
             this.ScheduleListView = new System.Windows.Forms.ListView();
             this.NavigationMenuStrip = new System.Windows.Forms.MenuStrip();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.VersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._ScheduleControlSplitContainer = new System.Windows.Forms.SplitContainer();
             this.RecommendButton = new System.Windows.Forms.Button();
             this.CreateButton = new System.Windows.Forms.Button();
@@ -37,12 +43,6 @@
             this._FooterSplitContainer = new System.Windows.Forms.SplitContainer();
             this.SaveButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
-            this.ImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.VersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this._MainSplitContainer.Panel1.SuspendLayout();
             this._MainSplitContainer.Panel2.SuspendLayout();
             this._MainSplitContainer.SuspendLayout();
@@ -165,6 +165,47 @@
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(66, 20);
             this.FileToolStripMenuItem.Text = "ファイル(&F)";
             // 
+            // ImportToolStripMenuItem
+            // 
+            this.ImportToolStripMenuItem.Name = "ImportToolStripMenuItem";
+            this.ImportToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.ImportToolStripMenuItem.Text = "インポート(&O)";
+            this.ImportToolStripMenuItem.Click += new System.EventHandler(this.ImportToolStripMenuItem_Click);
+            // 
+            // ExportToolStripMenuItem
+            // 
+            this.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem";
+            this.ExportToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.ExportToolStripMenuItem.Text = "エクスポート(&S)";
+            this.ExportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(136, 6);
+            // 
+            // ExitToolStripMenuItem
+            // 
+            this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
+            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.ExitToolStripMenuItem.Text = "終了(&X)";
+            this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
+            // 
+            // HelpToolStripMenuItem
+            // 
+            this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.VersionToolStripMenuItem});
+            this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
+            this.HelpToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.HelpToolStripMenuItem.Text = "ヘルプ(&H)";
+            // 
+            // VersionToolStripMenuItem
+            // 
+            this.VersionToolStripMenuItem.Name = "VersionToolStripMenuItem";
+            this.VersionToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
+            this.VersionToolStripMenuItem.Text = "CubePowerSaver について(&A)";
+            this.VersionToolStripMenuItem.Click += new System.EventHandler(this.VersionToolStripMenuItem_Click);
+            // 
             // _ScheduleControlSplitContainer
             // 
             this._ScheduleControlSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -179,15 +220,16 @@
             this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.RecommendButton);
             this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.CreateButton);
             this._ScheduleControlSplitContainer.Panel2.Controls.Add(this.DeleteButton);
+            this._ScheduleControlSplitContainer.Panel2.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this._ScheduleControlSplitContainer.Size = new System.Drawing.Size(788, 30);
-            this._ScheduleControlSplitContainer.SplitterDistance = 250;
+            this._ScheduleControlSplitContainer.SplitterDistance = 253;
             this._ScheduleControlSplitContainer.SplitterWidth = 1;
             this._ScheduleControlSplitContainer.TabIndex = 0;
             this._ScheduleControlSplitContainer.TabStop = false;
             // 
             // RecommendButton
             // 
-            this.RecommendButton.Location = new System.Drawing.Point(433, 3);
+            this.RecommendButton.Location = new System.Drawing.Point(424, 3);
             this.RecommendButton.Name = "RecommendButton";
             this.RecommendButton.Size = new System.Drawing.Size(100, 23);
             this.RecommendButton.TabIndex = 7;
@@ -197,7 +239,7 @@
             // 
             // CreateButton
             // 
-            this.CreateButton.Location = new System.Drawing.Point(171, 3);
+            this.CreateButton.Location = new System.Drawing.Point(162, 3);
             this.CreateButton.Name = "CreateButton";
             this.CreateButton.Size = new System.Drawing.Size(150, 23);
             this.CreateButton.TabIndex = 6;
@@ -208,7 +250,7 @@
             // DeleteButton
             // 
             this.DeleteButton.Enabled = false;
-            this.DeleteButton.Location = new System.Drawing.Point(327, 3);
+            this.DeleteButton.Location = new System.Drawing.Point(318, 3);
             this.DeleteButton.Name = "DeleteButton";
             this.DeleteButton.Size = new System.Drawing.Size(100, 23);
             this.DeleteButton.TabIndex = 5;
@@ -228,15 +270,16 @@
             // 
             this._FooterSplitContainer.Panel2.Controls.Add(this.SaveButton);
             this._FooterSplitContainer.Panel2.Controls.Add(this.ExitButton);
+            this._FooterSplitContainer.Panel2.Padding = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this._FooterSplitContainer.Size = new System.Drawing.Size(792, 30);
-            this._FooterSplitContainer.SplitterDistance = 506;
+            this._FooterSplitContainer.SplitterDistance = 509;
             this._FooterSplitContainer.SplitterWidth = 1;
             this._FooterSplitContainer.TabIndex = 0;
             this._FooterSplitContainer.TabStop = false;
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(73, 3);
+            this.SaveButton.Location = new System.Drawing.Point(64, 3);
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(100, 23);
             this.SaveButton.TabIndex = 5;
@@ -246,54 +289,13 @@
             // 
             // ExitButton
             // 
-            this.ExitButton.Location = new System.Drawing.Point(179, 3);
+            this.ExitButton.Location = new System.Drawing.Point(170, 3);
             this.ExitButton.Name = "ExitButton";
             this.ExitButton.Size = new System.Drawing.Size(100, 23);
             this.ExitButton.TabIndex = 4;
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
-            // 
-            // ImportToolStripMenuItem
-            // 
-            this.ImportToolStripMenuItem.Name = "ImportToolStripMenuItem";
-            this.ImportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.ImportToolStripMenuItem.Text = "インポート(&O)";
-            this.ImportToolStripMenuItem.Click += new System.EventHandler(this.ImportToolStripMenuItem_Click);
-            // 
-            // ExportToolStripMenuItem
-            // 
-            this.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem";
-            this.ExportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.ExportToolStripMenuItem.Text = "エクスポート(&S)";
-            this.ExportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
-            // 
-            // ExitToolStripMenuItem
-            // 
-            this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.ExitToolStripMenuItem.Text = "終了(&X)";
-            this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
-            // 
-            // HelpToolStripMenuItem
-            // 
-            this.HelpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.VersionToolStripMenuItem});
-            this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
-            this.HelpToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
-            this.HelpToolStripMenuItem.Text = "ヘルプ(&H)";
-            // 
-            // VersionToolStripMenuItem
-            // 
-            this.VersionToolStripMenuItem.Name = "VersionToolStripMenuItem";
-            this.VersionToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
-            this.VersionToolStripMenuItem.Text = "CubePowerSaver について(&A)";
-            this.VersionToolStripMenuItem.Click += new System.EventHandler(this.VersionToolStripMenuItem_Click);
             // 
             // MainForm
             // 

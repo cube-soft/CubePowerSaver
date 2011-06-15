@@ -45,6 +45,10 @@
             this.LastDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.SaveButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
+            this._ExtendLabel = new System.Windows.Forms.Label();
+            this._ExtendTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this._DimLabel = new System.Windows.Forms.Label();
+            this.DimComboBox = new System.Windows.Forms.ComboBox();
             this._FooterButtonsSplitContainer.Panel1.SuspendLayout();
             this._FooterButtonsSplitContainer.Panel2.SuspendLayout();
             this._FooterButtonsSplitContainer.SuspendLayout();
@@ -53,6 +57,7 @@
             this.DetailTableLayoutPanel.SuspendLayout();
             this._ScheduleGroupBox.SuspendLayout();
             this._ScheduleTableLayoutPanel.SuspendLayout();
+            this._ExtendTableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // _FooterButtonsSplitContainer
@@ -75,8 +80,8 @@
             this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.SaveButton);
             this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.ExitButton);
             this._FooterButtonsSplitContainer.Panel2MinSize = 30;
-            this._FooterButtonsSplitContainer.Size = new System.Drawing.Size(452, 348);
-            this._FooterButtonsSplitContainer.SplitterDistance = 317;
+            this._FooterButtonsSplitContainer.Size = new System.Drawing.Size(452, 418);
+            this._FooterButtonsSplitContainer.SplitterDistance = 387;
             this._FooterButtonsSplitContainer.SplitterWidth = 1;
             this._FooterButtonsSplitContainer.TabIndex = 0;
             // 
@@ -102,10 +107,12 @@
             // 
             // _DetailGroupBox
             // 
+            this._DetailGroupBox.Controls.Add(this._ExtendTableLayoutPanel);
+            this._DetailGroupBox.Controls.Add(this._ExtendLabel);
             this._DetailGroupBox.Controls.Add(this.DetailTableLayoutPanel);
             this._DetailGroupBox.Location = new System.Drawing.Point(12, 166);
             this._DetailGroupBox.Name = "_DetailGroupBox";
-            this._DetailGroupBox.Size = new System.Drawing.Size(428, 128);
+            this._DetailGroupBox.Size = new System.Drawing.Size(428, 180);
             this._DetailGroupBox.TabIndex = 1;
             this._DetailGroupBox.TabStop = false;
             this._DetailGroupBox.Text = "電源設定";
@@ -330,11 +337,56 @@
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
+            // _ExtendLabel
+            // 
+            this._ExtendLabel.AutoSize = true;
+            this._ExtendLabel.Location = new System.Drawing.Point(9, 133);
+            this._ExtendLabel.Name = "_ExtendLabel";
+            this._ExtendLabel.Size = new System.Drawing.Size(294, 12);
+            this._ExtendLabel.TabIndex = 4;
+            this._ExtendLabel.Text = "※これ以降の設定は Windows Vista 以降でのみ有効です。";
+            // 
+            // _ExtendTableLayoutPanel
+            // 
+            this._ExtendTableLayoutPanel.ColumnCount = 2;
+            this._ExtendTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this._ExtendTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this._ExtendTableLayoutPanel.Controls.Add(this._DimLabel, 0, 0);
+            this._ExtendTableLayoutPanel.Controls.Add(this.DimComboBox, 1, 0);
+            this._ExtendTableLayoutPanel.Location = new System.Drawing.Point(6, 148);
+            this._ExtendTableLayoutPanel.Name = "_ExtendTableLayoutPanel";
+            this._ExtendTableLayoutPanel.RowCount = 1;
+            this._ExtendTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this._ExtendTableLayoutPanel.Size = new System.Drawing.Size(416, 26);
+            this._ExtendTableLayoutPanel.TabIndex = 5;
+            // 
+            // _DimLabel
+            // 
+            this._DimLabel.AutoSize = true;
+            this._DimLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this._DimLabel.Location = new System.Drawing.Point(3, 3);
+            this._DimLabel.Margin = new System.Windows.Forms.Padding(3);
+            this._DimLabel.Name = "_DimLabel";
+            this._DimLabel.Size = new System.Drawing.Size(77, 20);
+            this._DimLabel.TabIndex = 0;
+            this._DimLabel.Text = "モニタを暗くする";
+            this._DimLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // DimComboBox
+            // 
+            this.DimComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.DimComboBox.FormattingEnabled = true;
+            this.DimComboBox.Location = new System.Drawing.Point(203, 3);
+            this.DimComboBox.Name = "DimComboBox";
+            this.DimComboBox.Size = new System.Drawing.Size(210, 20);
+            this.DimComboBox.TabIndex = 1;
+            this.DimComboBox.SelectedIndexChanged += new System.EventHandler(this.DetailComboBox_SelectedIndexChanged);
+            // 
             // ScheduleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(452, 348);
+            this.ClientSize = new System.Drawing.Size(452, 418);
             this.Controls.Add(this._FooterButtonsSplitContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -347,12 +399,15 @@
             this._FooterButtonsSplitContainer.ResumeLayout(false);
             this._ProfileGroupBox.ResumeLayout(false);
             this._DetailGroupBox.ResumeLayout(false);
+            this._DetailGroupBox.PerformLayout();
             this.DetailTableLayoutPanel.ResumeLayout(false);
             this.DetailTableLayoutPanel.PerformLayout();
             this._ScheduleGroupBox.ResumeLayout(false);
             this._ScheduleGroupBox.PerformLayout();
             this._ScheduleTableLayoutPanel.ResumeLayout(false);
             this._ScheduleTableLayoutPanel.PerformLayout();
+            this._ExtendTableLayoutPanel.ResumeLayout(false);
+            this._ExtendTableLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -381,5 +436,9 @@
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button ExitButton;
         private System.Windows.Forms.CheckBox DefaultSettingCheckBox;
+        private System.Windows.Forms.TableLayoutPanel _ExtendTableLayoutPanel;
+        private System.Windows.Forms.Label _ExtendLabel;
+        private System.Windows.Forms.Label _DimLabel;
+        private System.Windows.Forms.ComboBox DimComboBox;
     }
 }

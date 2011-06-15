@@ -47,6 +47,7 @@ namespace CubePower {
             InitializeComponent();
             this.InitializeComboAppearance();
             this._EnableComboEvents = true;
+            this.ProfileComboBox.SelectedIndex = 0;
         }
 
         /* ----------------------------------------------------------------- */
@@ -54,7 +55,6 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         private void InitializeComboAppearance() {
             this.ResetProfileList();
-            this.ProfileComboBox.SelectedItem = this._scheme.Active.Name;
 
             // 電源設定
             this.MonitorComboBox.Items.Clear();
@@ -77,7 +77,10 @@ namespace CubePower {
                 this.HibernationComboBox.Items.Add(Appearance.ExpireTypeString(id));
             }
 
-            this.LoadProfile(this._scheme.Active);
+            this.DimComboBox.Items.Clear();
+            foreach (Parameter.ExpireTypes id in Enum.GetValues(typeof(Parameter.ExpireTypes))) {
+                this.DimComboBox.Items.Add(Appearance.ExpireTypeString(id));
+            }
         }
 
         #endregion // Initialize operations
@@ -221,6 +224,8 @@ namespace CubePower {
                 Translator.SecondToExpireType(src.Policy.user.IdleTimeoutAc));
             this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.Policy.mach.DozeS4TimeoutAc));
+            this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
+                Translator.SecondToExpireType(src.DimTimeout));
             this._EnableComboEvents = prev;
 
             this._DetailGroupBox.Text = "[" + src.Name + "] の電源設定";
@@ -242,6 +247,8 @@ namespace CubePower {
                 Translator.SecondToExpireType(src.StandByTimeout));
             this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.HibernationTimeout));
+            this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
+                Translator.SecondToExpireType(src.DimTimeout));
             this._EnableComboEvents = prev;
 
             this.ProfileComboBox.SelectedIndex = this.ProfileComboBox.Items.Count - 1;
@@ -262,6 +269,8 @@ namespace CubePower {
                 Translator.IndexToExpireType(this.StandByComboBox.SelectedIndex));
             dest.HibernationTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.HibernationComboBox.SelectedIndex));
+            dest.DimTimeout = Translator.ExpireTypeToSecond(
+                Translator.IndexToExpireType(this.DimComboBox.SelectedIndex));
         }
 
         /* ----------------------------------------------------------------- */
@@ -275,6 +284,11 @@ namespace CubePower {
             foreach (PowerSchemeItem item in this._scheme.Elements) {
                 this.ProfileComboBox.Items.Add(item.Name);
             }
+
+            if (this.ProfileComboBox.Items.Contains(CUBEPOWER_PROFILENAME)) {
+                this.ProfileComboBox.Items.Remove(CUBEPOWER_PROFILENAME);
+            }
+
             this._EnableComboEvents = prev;
             this.ProfileComboBox.EndUpdate();
         }
@@ -295,6 +309,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         #region Constant variables
         private const string CUSTOM_PROFILE = "カスタム";
+        private static readonly string CUBEPOWER_PROFILENAME = "CubePowerSaver の電源設定";
         #endregion
     }
 }

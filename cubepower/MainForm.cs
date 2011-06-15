@@ -83,6 +83,11 @@ namespace CubePower {
             hibernation.Width = 120;
             this.ScheduleListView.Columns.Add(hibernation);
 
+            ColumnHeader dim = new ColumnHeader();
+            dim.Text = "モニタを暗くする";
+            dim.Width = 120;
+            this.ScheduleListView.Columns.Add(dim);
+
             // NOTE: アイコンがないと上下の余白が小さくなるのでダミーを設定する．
             ImageList dummy = new ImageList();
             dummy.ImageSize = new System.Drawing.Size(1, 16);
@@ -309,6 +314,7 @@ namespace CubePower {
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout)));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout)));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout)));
+                item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DimTimeout)));
                 this.ScheduleListView.Items.Add(item);
                 this._schedule.Add(key, value);
                 this.ValidateSchedule();
@@ -326,6 +332,7 @@ namespace CubePower {
                 dest.SubItems[3].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout));
                 dest.SubItems[4].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout));
                 dest.SubItems[5].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout));
+                dest.SubItems[6].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DimTimeout));
                 this.ValidateSchedule();
             }
         }

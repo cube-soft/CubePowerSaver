@@ -198,6 +198,15 @@ namespace CubePower {
             get { return policy_; }
             set { policy_ = value; }
         }
+
+        /* ----------------------------------------------------------------- */
+        /// DimTimeout
+        /* ----------------------------------------------------------------- */
+        public uint DimTimeout {
+            get { return _dim; }
+            set { _dim = value; }
+        }
+
         #endregion
 
         /* ----------------------------------------------------------------- */
@@ -207,6 +216,10 @@ namespace CubePower {
         private string name_ = "";
         private string description_ = "";
         private POWER_POLICY policy_ = new POWER_POLICY();
+
+        // extended
+        private uint _dim = 0;
+
         #endregion
     }
 
