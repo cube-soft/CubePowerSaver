@@ -394,6 +394,7 @@
             // PowerThrottleComboBox
             // 
             this.PowerThrottleComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PowerThrottleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.PowerThrottleComboBox.FormattingEnabled = true;
             this.PowerThrottleComboBox.Location = new System.Drawing.Point(203, 107);
             this.PowerThrottleComboBox.Name = "PowerThrottleComboBox";
