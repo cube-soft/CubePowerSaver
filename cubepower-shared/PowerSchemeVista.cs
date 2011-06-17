@@ -44,6 +44,7 @@ namespace CubePower {
                 if (elem.Value.Name == item.Name) {
                     bool status = true;
                     Guid scheme = elem.Key;
+                    KeyValuePair<uint, uint> throttle = this.GetProcessorThrottle((PowerThrottlePolicy)item.Policy.user.ThrottlePolicyAc);
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_TIMEOUT, item.Policy.user.VideoTimeoutAc);
                     status &= this.SetACValue(scheme, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
                     status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT, item.Policy.user.IdleTimeoutAc);
@@ -51,6 +52,8 @@ namespace CubePower {
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT, item.DimTimeout);
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_BRIGHTNESS, item.Brightness);
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_BRIGHTNESS, item.DimBrightness);
+                    status &= this.SetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN, throttle.Key);
+                    status &= this.SetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX, throttle.Value);
 
                     return status;
                 }
@@ -75,6 +78,7 @@ namespace CubePower {
                 dest = (Guid)Marshal.PtrToStructure(dest_handle, typeof(Guid));
 
                 bool status = true;
+                KeyValuePair<uint, uint> throttle = this.GetProcessorThrottle((PowerThrottlePolicy)item.Policy.user.ThrottlePolicyAc);
                 status &= this.SetProfileName(dest, item.Name);
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_TIMEOUT, item.Policy.user.VideoTimeoutAc);
                 status &= this.SetACValue(dest, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
@@ -83,6 +87,8 @@ namespace CubePower {
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT, item.DimTimeout);
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_BRIGHTNESS, item.Brightness);
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_BRIGHTNESS, item.DimBrightness);
+                status &= this.SetACValue(dest, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN, throttle.Key);
+                status &= this.SetACValue(dest, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX, throttle.Value);
 
                 if (!status) {
                     NativeMethods.PowerDeleteScheme(IntPtr.Zero, ref dest);
@@ -209,6 +215,15 @@ namespace CubePower {
                 policy.user.SpindownTimeoutAc = this.GetACValue(scheme, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT);
                 policy.user.IdleTimeoutAc = this.GetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT);
                 policy.mach.DozeS4TimeoutAc = this.GetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_HIBERNATION_TIMEOUT);
+
+                // プロセッサ調整
+                uint min = this.GetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN);
+                uint max = this.GetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX);
+                if (max == 100 && min == 100) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_NONE;
+                else if (max == 100) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
+                else if (max > 50) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_CONSTANT;
+                else policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_DEGRADE;
+
                 item.Policy = policy;
 
                 item.DimTimeout = this.GetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT);
@@ -229,6 +244,17 @@ namespace CubePower {
             StringBuilder name = new StringBuilder((int)size);
             NativeMethods.PowerReadFriendlyName(IntPtr.Zero, ref scheme, IntPtr.Zero, IntPtr.Zero, name, ref size);
             return name.ToString();
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// GetProcessorThrottle
+        /* ----------------------------------------------------------------- */
+        private KeyValuePair<uint, uint> GetProcessorThrottle(PowerThrottlePolicy policy) {
+            if (policy == PowerThrottlePolicy.PO_THROTTLE_NONE) return new KeyValuePair<uint, uint>(100, 100);
+            else if (policy == PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE) return new KeyValuePair<uint, uint>(5, 100);
+            else if (policy == PowerThrottlePolicy.PO_THROTTLE_CONSTANT) return new KeyValuePair<uint, uint>(5, 75);
+            else if (policy == PowerThrottlePolicy.PO_THROTTLE_DEGRADE) return new KeyValuePair<uint, uint>(5, 50);
+            return new KeyValuePair<uint, uint>(5, 100);
         }
 
         /* ----------------------------------------------------------------- */
@@ -395,7 +421,7 @@ namespace CubePower {
 
         // ディスプレイ関連
         private static readonly Guid GUID_VIDEO_SUBGROUP        = new Guid("7516b95f-f776-4464-8c53-06167f40cc99");
-        private static readonly Guid GUID_VIDEO_DIM_TIMEOUT             = new Guid("17aaa29b-8b43-4b94-aafe-35f64daaf1ee");
+        private static readonly Guid GUID_VIDEO_DIM_TIMEOUT     = new Guid("17aaa29b-8b43-4b94-aafe-35f64daaf1ee");
         private static readonly Guid GUID_VIDEO_TIMEOUT         = new Guid("3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e");
         private static readonly Guid GUID_VIDEO_BRIGHTNESS      = new Guid("aded5e82-b909-4619-9949-f5d71dac0bcb");
         private static readonly Guid GUID_VIDEO_DIM_BRIGHTNESS  = new Guid("f1fbfde2-a960-4165-9f88-50667911ce96");
@@ -408,6 +434,11 @@ namespace CubePower {
         private static readonly Guid GUID_SLEEP_SUBGROUP        = new Guid("238C9FA8-0AAD-41ED-83F4-97BE242C8F20");
         private static readonly Guid GUID_STANDBY_TIMEOUT       = new Guid("29f6c1db-86da-48c5-9fdb-f2b67b1f44da");
         private static readonly Guid GUID_HIBERNATION_TIMEOUT   = new Guid("9d7815a6-7ee4-497e-8888-515a05f02364");
+
+        // プロセッサ関連
+        private static readonly Guid GUID_PROCESSOR_SUBGROUP    = new Guid("54533251-82be-4824-96c1-47b60b740d00");
+        private static readonly Guid GUID_PROCESSOR_MIN         = new Guid("893dee8e-2bef-41e0-89c6-b55d0929964c");
+        private static readonly Guid GUID_PROCESSOR_MAX         = new Guid("bc5038f7-23e0-4960-96da-33abaf5935ec");
 
         // その他
         private static readonly Guid NO_SUBGROUP_GUID           = new Guid("fea3413e-7e05-4911-9a71-700331f1c294");
