@@ -147,8 +147,12 @@ namespace CubePower {
                     dialog.First = item.First;
                     dialog.Last = item.Last;
                 }
-                dialog.ProfileName = item.ProfileName;
-                if (item.ProfileName == CUSTOM_PROFILE) dialog.PowerSetting = item.ACValues;
+
+                if (this._setting.Scheme.Find(item.ProfileName) == null) {
+                    dialog.PowerSetting = item.ACValues;
+                    dialog.ProfileName = CUSTOM_PROFILE;
+                }
+                else dialog.ProfileName = item.ProfileName;
             }
 
             if (dialog.ShowDialog(this) == DialogResult.OK) {
