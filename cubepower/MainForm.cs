@@ -416,6 +416,7 @@ namespace CubePower {
             sched.ACValues.DiskTimeout = 0;
             sched.ACValues.StandByTimeout = 0;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.ThrottlePolicy = PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
             sched.ACValues.DimTimeout = 0;
             sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 100);
             sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
@@ -430,6 +431,7 @@ namespace CubePower {
             sched.ACValues.DiskTimeout = 900;
             sched.ACValues.StandByTimeout = 900;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.ThrottlePolicy = PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
             sched.ACValues.DimTimeout = 120;
             sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 40);
             sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
@@ -445,6 +447,7 @@ namespace CubePower {
             sched.ACValues.DiskTimeout = 900;
             sched.ACValues.StandByTimeout = 900;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.ThrottlePolicy = PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
             sched.ACValues.DimTimeout = 120;
             sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 40);
             sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
@@ -460,6 +463,7 @@ namespace CubePower {
             sched.ACValues.DiskTimeout = 900;
             sched.ACValues.StandByTimeout = 900;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.ThrottlePolicy = PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
             sched.ACValues.DimTimeout = 120;
             sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 40);
             sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);

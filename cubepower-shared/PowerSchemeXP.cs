@@ -48,10 +48,27 @@ namespace CubePower {
                     policy.user.SpindownTimeoutAc = item.Policy.user.SpindownTimeoutAc;
                     policy.user.IdleTimeoutAc = item.Policy.user.IdleTimeoutAc;
                     policy.mach.DozeS4TimeoutAc = item.Policy.mach.DozeS4TimeoutAc;
+                    policy.user.ThrottlePolicyAc = item.Policy.user.ThrottlePolicyAc;
 
                     uint index = elem.Key;
                     status = NativeMethods.WritePwrScheme(ref index, item.Name, item.Description, ref policy);
                     elem.Value.Policy = policy;
+
+                    // TODO: powercfg ÇégópÇπÇ∏Ç…ê›íËÇ∑ÇÈï˚ñ@
+                    System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
+                    info.FileName = "powercfg";
+                    info.Arguments = "/CHANGE \"" + item.Name + "\" /processor-throttle-ac ";
+                    if (item.Policy.user.ThrottlePolicyAc == (byte)PowerThrottlePolicy.PO_THROTTLE_NONE) info.Arguments += "NONE";
+                    else if (item.Policy.user.ThrottlePolicyAc == (byte)PowerThrottlePolicy.PO_THROTTLE_CONSTANT) info.Arguments += "CONSTANT";
+                    else if (item.Policy.user.ThrottlePolicyAc == (byte)PowerThrottlePolicy.PO_THROTTLE_DEGRADE) info.Arguments += "DEGRADE";
+                    else info.Arguments += "ADAPTIVE";
+                    info.CreateNoWindow = true;
+                    info.UseShellExecute = false;
+                    System.Diagnostics.Process proc = new System.Diagnostics.Process();
+                    proc.StartInfo = info;
+                    proc.Start();
+                    proc.WaitForExit();
+
                     break;
                 }
             }

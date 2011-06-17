@@ -63,6 +63,7 @@ namespace CubePower {
             policy.user.SpindownTimeoutAc = item.ACValues.DiskTimeout;
             policy.user.IdleTimeoutAc = item.ACValues.StandByTimeout;
             policy.mach.DozeS4TimeoutAc = item.ACValues.HibernationTimeout;
+            policy.user.ThrottlePolicyAc = (byte)item.ACValues.ThrottlePolicy;
             elem.Policy = policy;
             elem.DimTimeout = item.ACValues.DimTimeout;
             elem.Brightness = item.ACValues.Brightness;

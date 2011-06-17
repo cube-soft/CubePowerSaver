@@ -48,6 +48,8 @@
             this.DiskComboBox = new System.Windows.Forms.ComboBox();
             this.StandByComboBox = new System.Windows.Forms.ComboBox();
             this.HibernationComboBox = new System.Windows.Forms.ComboBox();
+            this._PowerThrottleLabel = new System.Windows.Forms.Label();
+            this.PowerThrottleComboBox = new System.Windows.Forms.ComboBox();
             this._ScheduleGroupBox = new System.Windows.Forms.GroupBox();
             this.DefaultSettingCheckBox = new System.Windows.Forms.CheckBox();
             this._ScheduleTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -57,8 +59,6 @@
             this.LastDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.SaveButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
-            this._PowerThrottleLabel = new System.Windows.Forms.Label();
-            this.PowerThrottleComboBox = new System.Windows.Forms.ComboBox();
             this._FooterButtonsSplitContainer.Panel1.SuspendLayout();
             this._FooterButtonsSplitContainer.Panel2.SuspendLayout();
             this._FooterButtonsSplitContainer.SuspendLayout();
@@ -379,6 +379,27 @@
             this.HibernationComboBox.TabIndex = 7;
             this.HibernationComboBox.SelectedIndexChanged += new System.EventHandler(this.DetailComboBox_SelectedIndexChanged);
             // 
+            // _PowerThrottleLabel
+            // 
+            this._PowerThrottleLabel.AutoSize = true;
+            this._PowerThrottleLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this._PowerThrottleLabel.Location = new System.Drawing.Point(3, 107);
+            this._PowerThrottleLabel.Margin = new System.Windows.Forms.Padding(3);
+            this._PowerThrottleLabel.Name = "_PowerThrottleLabel";
+            this._PowerThrottleLabel.Size = new System.Drawing.Size(80, 20);
+            this._PowerThrottleLabel.TabIndex = 8;
+            this._PowerThrottleLabel.Text = "プロセッサ調整：";
+            this._PowerThrottleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // PowerThrottleComboBox
+            // 
+            this.PowerThrottleComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PowerThrottleComboBox.FormattingEnabled = true;
+            this.PowerThrottleComboBox.Location = new System.Drawing.Point(203, 107);
+            this.PowerThrottleComboBox.Name = "PowerThrottleComboBox";
+            this.PowerThrottleComboBox.Size = new System.Drawing.Size(210, 20);
+            this.PowerThrottleComboBox.TabIndex = 9;
+            // 
             // _ScheduleGroupBox
             // 
             this._ScheduleGroupBox.Controls.Add(this.DefaultSettingCheckBox);
@@ -483,27 +504,6 @@
             this.ExitButton.Text = "キャンセル";
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
-            // 
-            // _PowerThrottleLabel
-            // 
-            this._PowerThrottleLabel.AutoSize = true;
-            this._PowerThrottleLabel.Dock = System.Windows.Forms.DockStyle.Left;
-            this._PowerThrottleLabel.Location = new System.Drawing.Point(3, 107);
-            this._PowerThrottleLabel.Margin = new System.Windows.Forms.Padding(3);
-            this._PowerThrottleLabel.Name = "_PowerThrottleLabel";
-            this._PowerThrottleLabel.Size = new System.Drawing.Size(80, 20);
-            this._PowerThrottleLabel.TabIndex = 8;
-            this._PowerThrottleLabel.Text = "プロセッサ調整：";
-            this._PowerThrottleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // PowerThrottleComboBox
-            // 
-            this.PowerThrottleComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PowerThrottleComboBox.FormattingEnabled = true;
-            this.PowerThrottleComboBox.Location = new System.Drawing.Point(203, 107);
-            this.PowerThrottleComboBox.Name = "PowerThrottleComboBox";
-            this.PowerThrottleComboBox.Size = new System.Drawing.Size(210, 20);
-            this.PowerThrottleComboBox.TabIndex = 9;
             // 
             // ScheduleForm
             // 

@@ -180,6 +180,7 @@ namespace CubePower {
             this._default.ACValues.DiskTimeout = this._scheme.Active.Policy.user.SpindownTimeoutAc;
             this._default.ACValues.StandByTimeout = this._scheme.Active.Policy.user.IdleTimeoutAc;
             this._default.ACValues.HibernationTimeout = this._scheme.Active.Policy.mach.DozeS4TimeoutAc;
+            this._default.ACValues.ThrottlePolicy = (PowerThrottlePolicy)this._scheme.Active.Policy.user.ThrottlePolicyAc;
             this._default.ACValues.DimTimeout = this._scheme.Active.DimTimeout;
         }
 
@@ -308,6 +309,7 @@ namespace CubePower {
                 else if (child.Name == XML_DISK_TIMEOUT && child.HasChildNodes) dest.DiskTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_STANDBY_TIMEOUT && child.HasChildNodes) dest.StandByTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_HIBERNATION_TIMEOUT && child.HasChildNodes) dest.HibernationTimeout = UInt32.Parse(child.ChildNodes[0].Value);
+                else if (child.Name == XML_PROCESSOR_POLICY && child.HasChildNodes) dest.ThrottlePolicy = (PowerThrottlePolicy)UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_DIM_TIMEOUT && child.HasChildNodes) dest.DimTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_BRIGHTNESS && child.HasChildNodes) dest.Brightness = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_DIM_BRIGHTNESS && child.HasChildNodes) dest.DimBrightness = UInt32.Parse(child.ChildNodes[0].Value);
@@ -363,6 +365,10 @@ namespace CubePower {
             hibernation.InnerText = item.HibernationTimeout.ToString();
             parent.AppendChild(hibernation);
 
+            XmlElement processor = doc.CreateElement(XML_PROCESSOR_POLICY);
+            processor.InnerText = ((int)item.ThrottlePolicy).ToString();
+            parent.AppendChild(processor);
+
             XmlElement dim = doc.CreateElement(XML_DIM_TIMEOUT);
             dim.InnerText = item.DimTimeout.ToString();
             parent.AppendChild(dim);
@@ -405,6 +411,7 @@ namespace CubePower {
         private const string XML_DISK_TIMEOUT           = "disk";
         private const string XML_STANDBY_TIMEOUT        = "standby";
         private const string XML_HIBERNATION_TIMEOUT    = "hibernation";
+        private const string XML_PROCESSOR_POLICY       = "processor";
         private const string XML_DIM_TIMEOUT            = "dim";
         private const string XML_BRIGHTNESS             = "brightness";
         private const string XML_DIM_BRIGHTNESS         = "dimbrightness";
