@@ -77,6 +77,11 @@ namespace CubePower {
                 this.HibernationComboBox.Items.Add(Appearance.ExpireTypeString(id));
             }
 
+            this.PowerThrottleComboBox.Items.Clear();
+            foreach (PowerThrottlePolicy id in Enum.GetValues(typeof(PowerThrottlePolicy))) {
+                this.PowerThrottleComboBox.Items.Add(Appearance.PowerThrottlePolicyString(id));
+            }
+
             this.DimComboBox.Items.Clear();
             foreach (Parameter.ExpireTypes id in Enum.GetValues(typeof(Parameter.ExpireTypes))) {
                 this.DimComboBox.Items.Add(Appearance.ExpireTypeString(id));
@@ -224,6 +229,8 @@ namespace CubePower {
                 Translator.SecondToExpireType(src.Policy.user.IdleTimeoutAc));
             this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.Policy.mach.DozeS4TimeoutAc));
+            this.PowerThrottleComboBox.SelectedIndex = Translator.PowerThrottlePolicyToIndex(
+                (PowerThrottlePolicy)src.Policy.user.ThrottlePolicyAc);
             this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.DimTimeout));
             this.BrightnessNumericUpDown.Value = src.Brightness;
@@ -249,6 +256,7 @@ namespace CubePower {
                 Translator.SecondToExpireType(src.StandByTimeout));
             this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.HibernationTimeout));
+            this.PowerThrottleComboBox.SelectedIndex = Translator.PowerThrottlePolicyToIndex(src.ThrottlePolicy);
             this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.DimTimeout));
             this.BrightnessNumericUpDown.Value = src.Brightness;
@@ -273,6 +281,8 @@ namespace CubePower {
                 Translator.IndexToExpireType(this.StandByComboBox.SelectedIndex));
             dest.HibernationTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.HibernationComboBox.SelectedIndex));
+            dest.ThrottlePolicy = Translator.IndexToPowerThrottlePolicy(
+                this.PowerThrottleComboBox.SelectedIndex);
             dest.DimTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.DimComboBox.SelectedIndex));
             dest.Brightness = (uint)this.BrightnessNumericUpDown.Value;

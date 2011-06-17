@@ -83,10 +83,25 @@ namespace CubePower {
             hibernation.Width = 110;
             this.ScheduleListView.Columns.Add(hibernation);
 
+            ColumnHeader throttle = new ColumnHeader();
+            throttle.Text = "プロセッサ調整";
+            throttle.Width = 110;
+            this.ScheduleListView.Columns.Add(throttle);
+
             ColumnHeader dim = new ColumnHeader();
             dim.Text = "ディスプレイを暗くする";
             dim.Width = 120;
             this.ScheduleListView.Columns.Add(dim);
+
+            ColumnHeader brightness = new ColumnHeader();
+            brightness.Text = "ディスプレイの明るさ";
+            brightness.Width = 120;
+            this.ScheduleListView.Columns.Add(brightness);
+
+            ColumnHeader dim_brightness = new ColumnHeader();
+            dim_brightness.Text = "ディスプレイ暗転時の明るさ";
+            dim_brightness.Width = 150;
+            this.ScheduleListView.Columns.Add(dim_brightness);
 
             // NOTE: アイコンがないと上下の余白が小さくなるのでダミーを設定する．
             ImageList dummy = new ImageList();
@@ -314,7 +329,10 @@ namespace CubePower {
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout)));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout)));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout)));
+                item.SubItems.Add(Appearance.PowerThrottlePolicyString(value.ACValues.ThrottlePolicy));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DimTimeout)));
+                item.SubItems.Add(value.ACValues.Brightness + "%");
+                item.SubItems.Add(value.ACValues.DimBrightness + "%");
                 this.ScheduleListView.Items.Add(item);
                 this._schedule.Add(key, value);
                 this.ValidateSchedule();
@@ -332,7 +350,10 @@ namespace CubePower {
                 dest.SubItems[3].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout));
                 dest.SubItems[4].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout));
                 dest.SubItems[5].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout));
-                dest.SubItems[6].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DimTimeout));
+                dest.SubItems[6].Text = Appearance.PowerThrottlePolicyString(value.ACValues.ThrottlePolicy);
+                dest.SubItems[7].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DimTimeout));
+                dest.SubItems[8].Text = value.ACValues.Brightness + "%";
+                dest.SubItems[9].Text = value.ACValues.DimBrightness + "%";
                 this.ValidateSchedule();
             }
         }
@@ -392,9 +413,12 @@ namespace CubePower {
             sched.Last  = DateTime.Parse("23:59");
             sched.ProfileName = "カスタム";
             sched.ACValues.MonitorTimeout = 3600;
-            sched.ACValues.DiskTimeout = 3600;
+            sched.ACValues.DiskTimeout = 0;
             sched.ACValues.StandByTimeout = 3600;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.DimTimeout = 600;
+            sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 100);
+            sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
             this.AddSchedule(DEFAULT_SETTING_NAME, sched);
 
             // 深夜の設定
@@ -403,9 +427,12 @@ namespace CubePower {
             sched.Last  = DateTime.Parse("8:00");
             sched.ProfileName = "カスタム";
             sched.ACValues.MonitorTimeout = 300;
-            sched.ACValues.DiskTimeout = 600;
-            sched.ACValues.StandByTimeout = 600;
+            sched.ACValues.DiskTimeout = 900;
+            sched.ACValues.StandByTimeout = 900;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.DimTimeout = 120;
+            sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 40);
+            sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
             key = sched.First.ToString("HH:mm") + " - " + sched.Last.ToString("HH:mm");
             this.AddSchedule(key, sched);
 
@@ -415,9 +442,12 @@ namespace CubePower {
             sched.Last = DateTime.Parse("13:00");
             sched.ProfileName = "カスタム";
             sched.ACValues.MonitorTimeout = 300;
-            sched.ACValues.DiskTimeout = 600;
-            sched.ACValues.StandByTimeout = 600;
+            sched.ACValues.DiskTimeout = 900;
+            sched.ACValues.StandByTimeout = 900;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.DimTimeout = 120;
+            sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 40);
+            sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
             key = sched.First.ToString("HH:mm") + " - " + sched.Last.ToString("HH:mm");
             this.AddSchedule(key, sched);
 
@@ -427,9 +457,12 @@ namespace CubePower {
             sched.Last = DateTime.Parse("23:59");
             sched.ProfileName = "カスタム";
             sched.ACValues.MonitorTimeout = 300;
-            sched.ACValues.DiskTimeout = 600;
-            sched.ACValues.StandByTimeout = 600;
+            sched.ACValues.DiskTimeout = 900;
+            sched.ACValues.StandByTimeout = 900;
             sched.ACValues.HibernationTimeout = 0;
+            sched.ACValues.DimTimeout = 120;
+            sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 40);
+            sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
             key = sched.First.ToString("HH:mm") + " - " + sched.Last.ToString("HH:mm");
             this.AddSchedule(key, sched);
 
@@ -514,7 +547,7 @@ namespace CubePower {
         #endregion
 
         private void VersionToolStripMenuItem_Click(object sender, EventArgs e) {
-            VersionDialog dialog = new VersionDialog("0.1.1");
+            VersionDialog dialog = new VersionDialog("0.1.3");
             dialog.ShowDialog(this);
         }
 

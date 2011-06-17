@@ -28,6 +28,8 @@
             this.MainNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.MainContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SettingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.VersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SeparatorStripMenuItem = new System.Windows.Forms.ToolStripSeparator();
             this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -44,21 +46,35 @@
             // 
             this.MainContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SettingToolStripMenuItem,
+            this.VersionToolStripMenuItem,
+            this.SeparatorStripMenuItem,
             this.ExitToolStripMenuItem});
             this.MainContextMenuStrip.Name = "MainContextMenuStrip";
-            this.MainContextMenuStrip.Size = new System.Drawing.Size(95, 48);
+            this.MainContextMenuStrip.Size = new System.Drawing.Size(140, 76);
             // 
             // SettingToolStripMenuItem
             // 
             this.SettingToolStripMenuItem.Name = "SettingToolStripMenuItem";
-            this.SettingToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.SettingToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.SettingToolStripMenuItem.Text = "設定";
             this.SettingToolStripMenuItem.Click += new System.EventHandler(this.SettingToolStripMenuItem_Click);
+            // 
+            // VersionToolStripMenuItem
+            // 
+            this.VersionToolStripMenuItem.Name = "VersionToolStripMenuItem";
+            this.VersionToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.VersionToolStripMenuItem.Text = "バージョン情報";
+            this.VersionToolStripMenuItem.Click += new System.EventHandler(this.VersionToolStripMenuItem_Click);
+            // 
+            // SeparatorStripMenuItem
+            // 
+            this.SeparatorStripMenuItem.Name = "SeparatorStripMenuItem";
+            this.SeparatorStripMenuItem.Size = new System.Drawing.Size(136, 6);
             // 
             // ExitToolStripMenuItem
             // 
             this.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem";
-            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.ExitToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.ExitToolStripMenuItem.Text = "終了";
             this.ExitToolStripMenuItem.Click += new System.EventHandler(this.ExitToolStripMenuItem_Click);
             // 
@@ -81,6 +97,8 @@
         private System.Windows.Forms.ContextMenuStrip MainContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem SettingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem VersionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator SeparatorStripMenuItem;
     }
 }
 

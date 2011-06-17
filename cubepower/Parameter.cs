@@ -105,6 +105,14 @@ namespace CubePower {
             }
             return 0;
         }
+
+        public static int PowerThrottlePolicyToIndex(PowerThrottlePolicy id) {
+            return (int)id;
+        }
+
+        public static PowerThrottlePolicy IndexToPowerThrottlePolicy(int index) {
+            return (PowerThrottlePolicy)index;
+        }
     }
     
     /* --------------------------------------------------------------------- */
@@ -131,6 +139,17 @@ namespace CubePower {
             default: break;
             }
             return "なし";
+        }
+
+        public static string PowerThrottlePolicyString(PowerThrottlePolicy id) {
+            switch (id) {
+            case PowerThrottlePolicy.PO_THROTTLE_NONE: return "NONE";
+            case PowerThrottlePolicy.PO_THROTTLE_CONSTANT: return "CONSTANT";
+            case PowerThrottlePolicy.PO_THROTTLE_DEGRADE: return "DEGRADE";
+            case PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE: return "ADAPTIVE";
+            default: break;
+            }
+            return "不明";
         }
     }
 }

@@ -276,7 +276,7 @@ namespace CubePower {
             ///
             /* ------------------------------------------------------------- */
             [DllImport("PowrProf.dll")]
-            public static extern UInt32 PowerEnumerate(IntPtr RootPowerKey, IntPtr SchemeGuid, IntPtr SubGroupOfPowerettingsGuid, POWER_DATA_ACCESSOR AccessFlags, uint Index, ref Guid Buffer, ref UInt32 BufferSize);
+            public static extern UInt32 PowerEnumerate(IntPtr RootPowerKey, IntPtr SchemeGuid, IntPtr SubGroupOfPowerettingsGuid, POWER_DATA_ACCESSOR AccessFlags, UInt32 Index, ref Guid Buffer, ref UInt32 BufferSize);
 
             /* ------------------------------------------------------------- */
             ///

@@ -79,6 +79,17 @@ namespace CubePower {
     }
 
     /* --------------------------------------------------------------------- */
+    /// PowerThrottlePolicy
+    /* --------------------------------------------------------------------- */
+    [Flags]
+    public enum PowerThrottlePolicy : uint {
+        PO_THROTTLE_NONE = 0x0000,
+        PO_THROTTLE_CONSTANT = 0x0001,
+        PO_THROTTLE_DEGRADE = 0x0002,
+        PO_THROTTLE_ADAPTIVE = 0x0003,
+    }
+
+    /* --------------------------------------------------------------------- */
     /// POWER_ACTION_POLICY
     /* --------------------------------------------------------------------- */
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -235,8 +246,8 @@ namespace CubePower {
 
         // extended
         private uint _dim = 0;
-        private uint _brightness = 0;
-        private uint _dim_brightness = 0;
+        private uint _brightness = 100;
+        private uint _dim_brightness = 100;
 
         #endregion
     }

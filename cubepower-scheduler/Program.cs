@@ -10,16 +10,14 @@ namespace CubePower {
         /// </summary>
         [STAThread]
         static void Main() {
+            if (System.Diagnostics.Process.GetProcessesByName(
+                System.Diagnostics.Process.GetCurrentProcess().ProcessName).Length > 1) return;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new DummyForm());
             new DummyForm();
             Application.Run();
-        }
-
-        private static void BackgroundWorker_DoWork(Object sender, DoWorkEventArgs e) {
-            Scheduler sched = new Scheduler();
-            sched.Execute();
         }
     }
 }

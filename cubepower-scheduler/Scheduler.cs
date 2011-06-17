@@ -5,47 +5,53 @@ using System.Text;
 namespace CubePower {
     public class Scheduler {
         public Scheduler() {
-            OperatingSystem info = Environment.OSVersion;
-            if (info.Version.Major > 5) this._scheme = new PowerSchemeVista();
-            else this._scheme = new PowerSchemeXP();
+            System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
+            string dir = System.IO.Path.GetDirectoryName(exec.Location);
+            string path = dir + @"\cubepower.xml";
+            if (System.IO.File.Exists(path)) this._setting.Load(path);
         }
 
         public void Execute() {
-            UserSetting setting = new UserSetting();
-            System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
-            string dir = System.IO.Path.GetDirectoryName(exec.Location);
-            setting.Load(dir + @"\cubepower.xml");
-
-            this.Update(setting.DefaultSetting);
+            this.Update(this._setting.DefaultSetting);
 
             int index = 0;
-            
-            // 実行時点で既に時間の過ぎているスケジュールを順に適用していく．
-            while (index < setting.Schedule.Count && IsPassed(setting.Schedule[index].First)) {
-                if (!IsPassed(setting.Schedule[index].Last)) {
-                    this.Update(setting.Schedule[index]);
+            while (this._setting.Schedule.Count > 0) {
+                DateTime now   = DateTime.Now;
+                DateTime first = DateTime.Parse(this._setting.Schedule[index].First.ToString("HH:mm"));
+                DateTime last  = DateTime.Parse(this._setting.Schedule[index].Last.ToString("HH:mm"));
+                if (first > last) last = last.AddDays(1);
+
+                if (now > first && now > last) {
+                    index++;
+                    if (index >= this._setting.Schedule.Count) {
+                        DateTime tomorrow = DateTime.Parse("00:00");
+                        tomorrow = tomorrow.AddDays(1);
+                        this.Sleep(tomorrow);
+                        index = 0;
+                    }
+                    continue;
                 }
+
+                if (now < first) this.Sleep(first);
+                this.Update(this._setting.Schedule[index]);
+                this.Sleep(last);
+                this.Update(this._setting.DefaultSetting);
+
                 index++;
-            }
-
-            for (; index < setting.Schedule.Count; index++) {
-                DateTime now = DateTime.Now;
-                DateTime compared = setting.Schedule[index].First;
-                TimeSpan span = compared.TimeOfDay - now.TimeOfDay;
-                System.Threading.Thread.Sleep((int)span.TotalMilliseconds);
-                this.Update(setting.Schedule[index]);
-
-                // スケジュールの終了時刻までスリープしてデフォルト設定に戻す
-                compared = setting.Schedule[index].Last;
-                span = compared - now;
-                System.Threading.Thread.Sleep((int)span.TotalMilliseconds);
-                this.Update(setting.DefaultSetting);
+                if (index >= this._setting.Schedule.Count) index = 0;
             }
         }
 
-        private bool IsPassed(DateTime compared) {
-            DateTime now = DateTime.Now;
-            return now.TimeOfDay > compared.TimeOfDay;
+        public void Reset() {
+            this.Update(this._setting.DefaultSetting);
+        }
+
+        private void Sleep(DateTime expire) {
+            TimeSpan upper_limit = new TimeSpan(0, 10, 0);
+            do {
+                TimeSpan span = expire - DateTime.Now;
+                System.Threading.Thread.Sleep(span < upper_limit ? span : upper_limit);
+            } while (DateTime.Now < expire);
         }
 
         private bool Update(ScheduleItem item) {
@@ -63,14 +69,14 @@ namespace CubePower {
             elem.DimBrightness = item.ACValues.DimBrightness;
 
             bool status = true;
-            if (this._scheme.Find(CUBEPOWER_PROFILENAME) == null) status &= this._scheme.Add(elem);
-            else status &= this._scheme.Update(elem);
-            status &= this._scheme.Activate(elem.Name);
+            if (this._setting.Scheme.Find(CUBEPOWER_PROFILENAME) == null) status &= this._setting.Scheme.Add(elem);
+            else status &= this._setting.Scheme.Update(elem);
+            status &= this._setting.Scheme.Activate(elem.Name);
             
             return status;
         }
         
-        private IPowerScheme _scheme;
+        private UserSetting _setting = new UserSetting();
         private static readonly string CUBEPOWER_PROFILENAME = "CubePowerSaver の電源設定";
         private static readonly string CUBEPOWER_DESCRIPTION = "CubePowerSaver によって管理されている電源設定です。";
     }

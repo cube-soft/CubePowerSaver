@@ -18,6 +18,8 @@ namespace CubePower {
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e) {
+            if (this._worker != null) this._worker.CancelAsync();
+            this._scheduler.Reset();
             this.MainNotifyIcon.Visible = false;
             Application.Exit();
         }
@@ -31,6 +33,8 @@ namespace CubePower {
                 proc.StartInfo.FileName = path;
                 proc.Start();
                 if (this._worker != null) this._worker.CancelAsync();
+                this._scheduler.Reset();
+                this.MainNotifyIcon.Visible = false;
                 Application.Exit();
             }
             else {
@@ -44,10 +48,15 @@ namespace CubePower {
         }
 
         private void BackgroundWorker_DoWork(Object sender, DoWorkEventArgs e) {
-            Scheduler sched = new Scheduler();
-            sched.Execute();
+            this._scheduler.Execute();
         }
 
         private BackgroundWorker _worker;
+        private Scheduler _scheduler = new Scheduler();
+
+        private void VersionToolStripMenuItem_Click(object sender, EventArgs e) {
+            VersionDialog dialog = new VersionDialog("0.1.3");
+            dialog.ShowDialog(this);
+        }
     }
 }
