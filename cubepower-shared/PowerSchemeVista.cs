@@ -141,6 +141,15 @@ namespace CubePower {
         }
 
         /* ----------------------------------------------------------------- */
+        /// Dump
+        /* ----------------------------------------------------------------- */
+        public void Dump(System.IO.StreamWriter output) {
+            foreach (KeyValuePair<Guid, PowerSchemeItem> elem in this._elements) {
+                output.WriteLine(String.Format("{0},{1},{2}", elem.Key, elem.Value.Name, elem.Value.Description));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
         //  プロパティ
         /* ----------------------------------------------------------------- */
         #region Properties

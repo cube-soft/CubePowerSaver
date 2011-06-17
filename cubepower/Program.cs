@@ -36,7 +36,22 @@ namespace CubePower {
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            try {
+                Application.Run(new MainForm());
+            }
+            catch (Exception err) {
+                System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
+                string dir = System.IO.Path.GetDirectoryName(exec.Location);
+                string path = dir + @"\cubepower.log";
+                using (System.IO.StreamWriter output = new System.IO.StreamWriter(path)) {
+                    output.WriteLine(err.Message);
+
+                    IPowerScheme scheme;
+                    if (Environment.OSVersion.Version.Major > 5) scheme = new PowerSchemeVista();
+                    else scheme = new PowerSchemeXP();
+                    scheme.Dump(output);
+                }
+            }
         }
     }
 }

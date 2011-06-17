@@ -412,11 +412,11 @@ namespace CubePower {
             sched.First = DateTime.Parse("00:00");
             sched.Last  = DateTime.Parse("23:59");
             sched.ProfileName = "カスタム";
-            sched.ACValues.MonitorTimeout = 3600;
+            sched.ACValues.MonitorTimeout = 1200;
             sched.ACValues.DiskTimeout = 0;
-            sched.ACValues.StandByTimeout = 3600;
+            sched.ACValues.StandByTimeout = 0;
             sched.ACValues.HibernationTimeout = 0;
-            sched.ACValues.DimTimeout = 600;
+            sched.ACValues.DimTimeout = 0;
             sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 100);
             sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
             this.AddSchedule(DEFAULT_SETTING_NAME, sched);
@@ -522,7 +522,7 @@ namespace CubePower {
         #endregion
 
         /* ----------------------------------------------------------------- */
-        //  変数
+        //  定数
         /* ----------------------------------------------------------------- */
         #region Constant variables
         private const string CUSTOM_PROFILE = "カスタム";
@@ -530,11 +530,7 @@ namespace CubePower {
         private const string TIME_FORMAT = "HH:mm";
         private const string EXPORT_FILENAME = "CubePowerSaver の設定.xml";
         private const int ERROR_COLOR = 0xff6666;
-        private enum CloseStatus {
-            Confirm = 0,
-            Save,
-            Cancel
-        }
+        private enum CloseStatus { Confirm = 0, Save, Cancel }
         #endregion
 
         /* ----------------------------------------------------------------- */

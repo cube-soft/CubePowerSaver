@@ -118,6 +118,15 @@ namespace CubePower {
         }
 
         /* ----------------------------------------------------------------- */
+        /// Dump
+        /* ----------------------------------------------------------------- */
+        public void Dump(System.IO.StreamWriter output) {
+            foreach (KeyValuePair<uint, PowerSchemeItem> elem in _Elements) {
+                output.WriteLine(String.Format("{0},{1},{2}", elem.Key, elem.Value.Name, elem.Value.Description));
+            }
+        }
+
+        /* ----------------------------------------------------------------- */
         //  プロパティ
         /* ----------------------------------------------------------------- */
         #region Properties

@@ -280,6 +280,7 @@ namespace CubePower {
         bool Remove(string name);
         PowerSchemeItem Find(string name);
         bool Activate(string name);
+        void Dump(System.IO.StreamWriter output); // for debug
 
         List<PowerSchemeItem> Elements { get; }
         PowerSchemeItem Active { get; }
