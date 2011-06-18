@@ -349,10 +349,16 @@ namespace CubePower {
                 else if (child.Name == XML_DISK_TIMEOUT && child.HasChildNodes) dest.DiskTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_STANDBY_TIMEOUT && child.HasChildNodes) dest.StandByTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_HIBERNATION_TIMEOUT && child.HasChildNodes) dest.HibernationTimeout = UInt32.Parse(child.ChildNodes[0].Value);
-                else if (child.Name == XML_PROCESSOR_POLICY && child.HasChildNodes) dest.ThrottlePolicy = (PowerThrottlePolicy)UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_DIM_TIMEOUT && child.HasChildNodes) dest.DimTimeout = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_BRIGHTNESS && child.HasChildNodes) dest.Brightness = UInt32.Parse(child.ChildNodes[0].Value);
                 else if (child.Name == XML_DIM_BRIGHTNESS && child.HasChildNodes) dest.DimBrightness = UInt32.Parse(child.ChildNodes[0].Value);
+                else if (child.Name == XML_PROCESSOR_POLICY && child.HasChildNodes) {
+                    dest.ThrottlePolicy = (PowerThrottlePolicy)UInt32.Parse(child.ChildNodes[0].Value);
+                    foreach (XmlAttribute attr in child.Attributes) {
+                        if (attr.Name == "min") dest.MinThrottle = UInt32.Parse(attr.Value);
+                        else if (attr.Name == "max") dest.MaxThrottle = UInt32.Parse(attr.Value);
+                    }
+                }
             }
             return dest;
         }
@@ -407,6 +413,8 @@ namespace CubePower {
 
             XmlElement processor = doc.CreateElement(XML_PROCESSOR_POLICY);
             processor.InnerText = ((int)item.ThrottlePolicy).ToString();
+            processor.SetAttribute("min", item.MinThrottle.ToString());
+            processor.SetAttribute("max", item.MaxThrottle.ToString());
             parent.AppendChild(processor);
 
             XmlElement dim = doc.CreateElement(XML_DIM_TIMEOUT);

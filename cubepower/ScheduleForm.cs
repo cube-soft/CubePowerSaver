@@ -206,17 +206,15 @@ namespace CubePower {
             if (control == null || !this._EnableComboEvents) return;
 
             int index = control.SelectedIndex;
-            if (Translator.IndexToPowerThrottlePolicy(index) != PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE) {
-                bool prev = this._EnableComboEvents;
-                this._EnableComboEvents = false;
-                int min = 5;
-                int max = 100;
-                if (Translator.IndexToPowerThrottlePolicy(index) == PowerThrottlePolicy.PO_THROTTLE_NONE) min = 100;
-                else if (Translator.IndexToPowerThrottlePolicy(index) == PowerThrottlePolicy.PO_THROTTLE_CONSTANT) max = 50;
-                this.MinPowerThrottleNumericUpDown.Value = min;
-                this.MaxPowerThrottleNumericUpDown.Value = max;
-                this._EnableComboEvents = prev;
-            }
+            bool prev = this._EnableComboEvents;
+            this._EnableComboEvents = false;
+            int min = 5;
+            int max = 100;
+            if (Translator.IndexToPowerThrottlePolicy(index) == PowerThrottlePolicy.PO_THROTTLE_NONE) min = 100;
+            else if (Translator.IndexToPowerThrottlePolicy(index) == PowerThrottlePolicy.PO_THROTTLE_CONSTANT) max = 50;
+            this.MinPowerThrottleNumericUpDown.Value = min;
+            this.MaxPowerThrottleNumericUpDown.Value = max;
+            this._EnableComboEvents = prev;
 
             this.DetailComboBox_SelectedIndexChanged(sender, e);
         }
