@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Microsoft.Win32;
 
 namespace CubePower {
     /* --------------------------------------------------------------------- */
@@ -172,16 +173,26 @@ namespace CubePower {
         /// constructor
         /* ----------------------------------------------------------------- */
         public UserSetting() {
-            OperatingSystem info = Environment.OSVersion;
-            if (info.Version.Major > 5) this._scheme = new PowerSchemeVista();
-            else this._scheme = new PowerSchemeXP();
-            this._default.ProfileName = this._scheme.Active.Name;
-            this._default.ACValues.MonitorTimeout = this._scheme.Active.Policy.user.VideoTimeoutAc;
-            this._default.ACValues.DiskTimeout = this._scheme.Active.Policy.user.SpindownTimeoutAc;
-            this._default.ACValues.StandByTimeout = this._scheme.Active.Policy.user.IdleTimeoutAc;
-            this._default.ACValues.HibernationTimeout = this._scheme.Active.Policy.mach.DozeS4TimeoutAc;
-            this._default.ACValues.ThrottlePolicy = (PowerThrottlePolicy)this._scheme.Active.Policy.user.ThrottlePolicyAc;
-            this._default.ACValues.DimTimeout = this._scheme.Active.DimTimeout;
+            try {
+                RegistryKey subkey = Registry.LocalMachine.OpenSubKey(REG_ROOT, false);
+                if (subkey != null) {
+                    _version = subkey.GetValue(REG_PRODUCT_VERSION, REG_VALUE_UNKNOWN) as string;
+                }
+
+                OperatingSystem info = Environment.OSVersion;
+                if (info.Version.Major > 5) this._scheme = new PowerSchemeVista();
+                else this._scheme = new PowerSchemeXP();
+                this._default.ProfileName = this._scheme.Active.Name;
+                this._default.ACValues.MonitorTimeout = this._scheme.Active.Policy.user.VideoTimeoutAc;
+                this._default.ACValues.DiskTimeout = this._scheme.Active.Policy.user.SpindownTimeoutAc;
+                this._default.ACValues.StandByTimeout = this._scheme.Active.Policy.user.IdleTimeoutAc;
+                this._default.ACValues.HibernationTimeout = this._scheme.Active.Policy.mach.DozeS4TimeoutAc;
+                this._default.ACValues.ThrottlePolicy = (PowerThrottlePolicy)this._scheme.Active.Policy.user.ThrottlePolicyAc;
+                this._default.ACValues.DimTimeout = this._scheme.Active.DimTimeout;
+            }
+            catch (Exception /* err */) {
+                // Nothing to do
+            }
         }
 
         /* ----------------------------------------------------------------- */
@@ -242,6 +253,14 @@ namespace CubePower {
         //  各種プロパティ
         /* ----------------------------------------------------------------- */
         #region Properties
+
+        /* ----------------------------------------------------------------- */
+        /// Version
+        /* ----------------------------------------------------------------- */
+        public string Version {
+            get { return this._version; }
+            set { this._version = value; }
+        }
 
         /* ----------------------------------------------------------------- */
         /// Scheme
@@ -390,6 +409,7 @@ namespace CubePower {
         //  変数宣言
         /* ----------------------------------------------------------------- */
         #region Variables
+        string _version = REG_VALUE_UNKNOWN;
         ScheduleItem _default = new ScheduleItem();
         List<ScheduleItem> _schedule = new List<ScheduleItem>();
         IPowerScheme _scheme;
@@ -399,6 +419,10 @@ namespace CubePower {
         //  定数宣言
         /* ----------------------------------------------------------------- */
         #region Constant variables
+        private const string REG_ROOT                   = @"Software\CubeSoft\CubePowerSaver";
+        private const string REG_INSTALL_PATH           = "InstallPath";
+        private const string REG_PRODUCT_VERSION        = "Version";
+        private const string REG_VALUE_UNKNOWN          = "Unknown";
         private const string XML_ROOT                   = "cubepower";
         private const string XML_DEFAULT_SETTING        = "default";
         private const string XML_SCHEDULE               = "schedule";

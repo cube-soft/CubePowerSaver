@@ -55,7 +55,8 @@ namespace CubePower {
         private Scheduler _scheduler = new Scheduler();
 
         private void VersionToolStripMenuItem_Click(object sender, EventArgs e) {
-            VersionDialog dialog = new VersionDialog("0.1.3");
+            UserSetting setting = new UserSetting();
+            VersionDialog dialog = new VersionDialog(setting.Version);
             dialog.ShowDialog(this);
         }
     }

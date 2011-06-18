@@ -43,10 +43,9 @@ namespace CubePower {
             this.InitializeScheduleList();
             
             // TODO: 設定ファイルを置く場所は LocalApp\cubepower
-            System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
-            string dir = System.IO.Path.GetDirectoryName(exec.Location);
-            string path = dir + @"\cubepower.xml";
-            this.LoadSetting(path);
+            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            appdata += @"\CubeSoft\CubePowerSaver";
+            this.LoadSetting(appdata + @"\cubepower.xml");
         }
 
         /* ----------------------------------------------------------------- */
@@ -322,10 +321,26 @@ namespace CubePower {
         }
 
         /* ----------------------------------------------------------------- */
+        /// SaveSetting
+        /* ----------------------------------------------------------------- */
+        private void SaveSetting() {
+            string appdata = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            appdata += @"\CubeSoft";
+            if (!System.IO.Directory.Exists(appdata)) System.IO.Directory.CreateDirectory(appdata);
+            appdata += @"\CubePowerSaver";
+            if (!System.IO.Directory.Exists(appdata)) System.IO.Directory.CreateDirectory(appdata);
+            this.SaveSetting(appdata + @"\cubepower.xml");
+        }
+
+        /* ----------------------------------------------------------------- */
         /// AddSchedule
         /* ----------------------------------------------------------------- */
         private void AddSchedule(string key, ScheduleItem value) {
             if (!this._schedule.ContainsKey(key)) {
+                if (value.ProfileName == CUBEPOWER_PROFILENAME || this._setting.Scheme.Find(value.ProfileName) == null) {
+                    value.ProfileName = CUSTOM_PROFILE;
+                }
+
                 ListViewItem item = new ListViewItem();
                 item.Text = key;
                 item.SubItems.Add(value.ProfileName);
@@ -534,6 +549,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         #region Constant variables
         private const string CUSTOM_PROFILE = "カスタム";
+        private static readonly string CUBEPOWER_PROFILENAME = "CubePowerSaver の電源設定";
         private const string DEFAULT_SETTING_NAME = "その他の時間";
         private const string TIME_FORMAT = "HH:mm";
         private const string EXPORT_FILENAME = "CubePowerSaver の設定.xml";
@@ -551,7 +567,7 @@ namespace CubePower {
         #endregion
 
         private void VersionToolStripMenuItem_Click(object sender, EventArgs e) {
-            VersionDialog dialog = new VersionDialog("0.1.3");
+            VersionDialog dialog = new VersionDialog(this._setting.Version);
             dialog.ShowDialog(this);
         }
 
@@ -566,9 +582,7 @@ namespace CubePower {
 
             if (status) {
                 if (this.ValidateSchedule()) {
-                    System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
-                    string dir = System.IO.Path.GetDirectoryName(exec.Location);
-                    this.SaveSetting(dir + @"\cubepower.xml");
+                    this.SaveSetting();
                     this.ExecScheduler();
                 }
                 else {
@@ -606,6 +620,5 @@ namespace CubePower {
         private void RecommendButton_Click(object sender, EventArgs e) {
             this.RecommendSchedule();
         }
-
     }
 }

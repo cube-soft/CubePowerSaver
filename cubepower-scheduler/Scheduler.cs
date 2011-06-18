@@ -5,8 +5,8 @@ using System.Text;
 namespace CubePower {
     public class Scheduler {
         public Scheduler() {
-            System.Reflection.Assembly exec = System.Reflection.Assembly.GetEntryAssembly();
-            string dir = System.IO.Path.GetDirectoryName(exec.Location);
+            string dir = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            dir += @"\CubeSoft\CubePowerSaver";
             string path = dir + @"\cubepower.xml";
             if (System.IO.File.Exists(path)) this._setting.Load(path);
         }

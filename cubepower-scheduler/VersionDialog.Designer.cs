@@ -61,7 +61,7 @@
             // 
             this.MainSplitContainer.Panel2.Controls.Add(this.OKButton);
             this.MainSplitContainer.Size = new System.Drawing.Size(333, 168);
-            this.MainSplitContainer.SplitterDistance = 123;
+            this.MainSplitContainer.SplitterDistance = 122;
             this.MainSplitContainer.SplitterWidth = 2;
             this.MainSplitContainer.TabIndex = 0;
             // 
@@ -97,12 +97,12 @@
             // CubePDFLinkLabel
             // 
             this.CubePDFLinkLabel.AutoSize = true;
-            this.CubePDFLinkLabel.Location = new System.Drawing.Point(70, 93);
+            this.CubePDFLinkLabel.Location = new System.Drawing.Point(78, 93);
             this.CubePDFLinkLabel.Name = "CubePDFLinkLabel";
-            this.CubePDFLinkLabel.Size = new System.Drawing.Size(192, 12);
+            this.CubePDFLinkLabel.Size = new System.Drawing.Size(166, 12);
             this.CubePDFLinkLabel.TabIndex = 2;
             this.CubePDFLinkLabel.TabStop = true;
-            this.CubePDFLinkLabel.Text = "http://www.cube-soft.jp/cubepower/";
+            this.CubePDFLinkLabel.Text = "http://s.cube-soft.jp/setsuden/";
             this.CubePDFLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.CubePDFLinkLabel_LinkClicked);
             // 
             // OKButton
