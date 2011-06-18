@@ -89,9 +89,28 @@ namespace CubePower {
             set { this._dim_brightness = value; }
         }
 
+        /* ----------------------------------------------------------------- */
+        /// ThrottlePolicy
+        /* ----------------------------------------------------------------- */
         public PowerThrottlePolicy ThrottlePolicy {
             get { return this._throttle; }
             set { this._throttle = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// MinThrottle
+        /* ----------------------------------------------------------------- */
+        public uint MinThrottle {
+            get { return _min_throttle; }
+            set { _min_throttle = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// MaxThrottle
+        /* ----------------------------------------------------------------- */
+        public uint MaxThrottle {
+            get { return _max_throttle; }
+            set { _max_throttle = value; }
         }
 
         #endregion // Properties
@@ -108,6 +127,8 @@ namespace CubePower {
         uint _brightness = 100;
         uint _dim_brightness = 100;
         PowerThrottlePolicy _throttle = PowerThrottlePolicy.PO_THROTTLE_NONE;
+        private uint _min_throttle = 5;
+        private uint _max_throttle = 100;
         #endregion // Variables
     }
 

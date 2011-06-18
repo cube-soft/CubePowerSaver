@@ -234,6 +234,22 @@ namespace CubePower {
             set { _dim_brightness = value; }
         }
 
+        /* ----------------------------------------------------------------- */
+        /// MinThrottle
+        /* ----------------------------------------------------------------- */
+        public uint MinThrottle {
+            get { return _min_throttle; }
+            set { _min_throttle = value; }
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// MaxThrottle
+        /* ----------------------------------------------------------------- */
+        public uint MaxThrottle {
+            get { return _max_throttle; }
+            set { _max_throttle = value; }
+        }
+
         #endregion
 
         /* ----------------------------------------------------------------- */
@@ -248,6 +264,8 @@ namespace CubePower {
         private uint _dim = 0;
         private uint _brightness = 100;
         private uint _dim_brightness = 100;
+        private uint _min_throttle = 5;
+        private uint _max_throttle = 100;
 
         #endregion
     }

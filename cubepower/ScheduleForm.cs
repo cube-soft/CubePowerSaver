@@ -79,6 +79,8 @@ namespace CubePower {
 
             this.PowerThrottleComboBox.Items.Clear();
             foreach (PowerThrottlePolicy id in Enum.GetValues(typeof(PowerThrottlePolicy))) {
+                // CubePowerSaver では DEGRADE は使用しない．
+                if (id == PowerThrottlePolicy.PO_THROTTLE_DEGRADE) continue;
                 this.PowerThrottleComboBox.Items.Add(Appearance.PowerThrottlePolicyString(id));
             }
 
@@ -197,6 +199,57 @@ namespace CubePower {
         }
 
         /* ----------------------------------------------------------------- */
+        /// PowerThrottleDetailComboBox_SelectedIndexChanged
+        /* ----------------------------------------------------------------- */
+        private void PowerThrottleDetailComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            ComboBox control = sender as ComboBox;
+            if (control == null || !this._EnableComboEvents) return;
+
+            int index = control.SelectedIndex;
+            if (Translator.IndexToPowerThrottlePolicy(index) != PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE) {
+                bool prev = this._EnableComboEvents;
+                this._EnableComboEvents = false;
+                int min = 5;
+                int max = 100;
+                if (Translator.IndexToPowerThrottlePolicy(index) == PowerThrottlePolicy.PO_THROTTLE_NONE) min = 100;
+                else if (Translator.IndexToPowerThrottlePolicy(index) == PowerThrottlePolicy.PO_THROTTLE_CONSTANT) max = 50;
+                this.MinPowerThrottleNumericUpDown.Value = min;
+                this.MaxPowerThrottleNumericUpDown.Value = max;
+                this._EnableComboEvents = prev;
+            }
+
+            this.DetailComboBox_SelectedIndexChanged(sender, e);
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// DetailNumericUpDown_ValueChanged
+        /* ----------------------------------------------------------------- */
+        private void DetailNumericUpDown_ValueChanged(object sender, EventArgs e) {
+            NumericUpDown control = sender as NumericUpDown;
+            if (control == null || !this._EnableComboEvents) return;
+            this.SaveSetting(this._setting);
+            if (!this.ProfileComboBox.Items.Contains(CUSTOM_PROFILE)) {
+                this.ProfileComboBox.Items.Add(CUSTOM_PROFILE);
+            }
+            this.ProfileComboBox.SelectedIndex = this.ProfileComboBox.Items.Count - 1;
+        }
+
+        /* ----------------------------------------------------------------- */
+        /// PowerThrottleDetailNumericUpDown_ValueChanged
+        /* ----------------------------------------------------------------- */
+        private void PowerThrottleDetailNumericUpDown_ValueChanged(object sender, EventArgs e) {
+            NumericUpDown control = sender as NumericUpDown;
+            if (control == null || !this._EnableComboEvents) return;
+
+            bool prev = this._EnableComboEvents;
+            this._EnableComboEvents = false;
+            this.PowerThrottleComboBox.SelectedIndex = Translator.PowerThrottlePolicyToIndex(PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE);
+            this._EnableComboEvents = prev;
+
+            this.DetailNumericUpDown_ValueChanged(sender, e);
+        }
+
+        /* ----------------------------------------------------------------- */
         /// DefaultSettingCheckBox_CheckedChanged
         /* ----------------------------------------------------------------- */
         private void DefaultSettingCheckBox_CheckedChanged(object sender, EventArgs e) {
@@ -229,12 +282,28 @@ namespace CubePower {
                 Translator.SecondToExpireType(src.Policy.user.IdleTimeoutAc));
             this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.Policy.mach.DozeS4TimeoutAc));
-            this.PowerThrottleComboBox.SelectedIndex = Translator.PowerThrottlePolicyToIndex(
-                (PowerThrottlePolicy)src.Policy.user.ThrottlePolicyAc);
             this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.DimTimeout));
             this.BrightnessNumericUpDown.Value = src.Brightness;
             this.DimBrightnessNumericUpDown.Value = src.DimBrightness;
+
+            PowerThrottlePolicy processor = (PowerThrottlePolicy)src.Policy.user.ThrottlePolicyAc;
+            this.PowerThrottleComboBox.SelectedIndex = Translator.PowerThrottlePolicyToIndex(processor);
+            switch (processor) {
+            case PowerThrottlePolicy.PO_THROTTLE_NONE:
+                this.MinPowerThrottleNumericUpDown.Value = 100;
+                this.MaxPowerThrottleNumericUpDown.Value = 100;
+                break;
+            case PowerThrottlePolicy.PO_THROTTLE_CONSTANT:
+                this.MinPowerThrottleNumericUpDown.Value = 5;
+                this.MaxPowerThrottleNumericUpDown.Value = 50;
+                break;
+            default:
+                this.MinPowerThrottleNumericUpDown.Value = 5;
+                this.MaxPowerThrottleNumericUpDown.Value = 100;
+                break;
+            }
+
             this._EnableComboEvents = prev;
 
             this._DetailGroupBox.Text = "[" + src.Name + "] の電源設定";

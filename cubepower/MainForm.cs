@@ -84,7 +84,7 @@ namespace CubePower {
 
             ColumnHeader throttle = new ColumnHeader();
             throttle.Text = "プロセッサ調整";
-            throttle.Width = 110;
+            throttle.Width = 170;
             this.ScheduleListView.Columns.Add(throttle);
 
             ColumnHeader dim = new ColumnHeader();
@@ -441,22 +441,6 @@ namespace CubePower {
             sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
             this.AddSchedule(DEFAULT_SETTING_NAME, sched);
 
-            // 深夜の設定
-            sched = new ScheduleItem();
-            sched.First = DateTime.Parse("00:00");
-            sched.Last  = DateTime.Parse("8:00");
-            sched.ProfileName = "カスタム";
-            sched.ACValues.MonitorTimeout = 300;
-            sched.ACValues.DiskTimeout = 900;
-            sched.ACValues.StandByTimeout = 900;
-            sched.ACValues.HibernationTimeout = 0;
-            sched.ACValues.ThrottlePolicy = PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
-            sched.ACValues.DimTimeout = 120;
-            sched.ACValues.Brightness = Math.Min(this._setting.Scheme.Active.Brightness, 40);
-            sched.ACValues.DimBrightness = Math.Min(this._setting.Scheme.Active.DimBrightness, 30);
-            key = sched.First.ToString("HH:mm") + " - " + sched.Last.ToString("HH:mm");
-            this.AddSchedule(key, sched);
-
             // お昼の設定
             sched = new ScheduleItem();
             sched.First = DateTime.Parse("12:00");
@@ -476,7 +460,7 @@ namespace CubePower {
             // 退社後の設定
             sched = new ScheduleItem();
             sched.First = DateTime.Parse("21:00");
-            sched.Last = DateTime.Parse("23:59");
+            sched.Last = DateTime.Parse("8:00");
             sched.ProfileName = "カスタム";
             sched.ACValues.MonitorTimeout = 300;
             sched.ACValues.DiskTimeout = 900;

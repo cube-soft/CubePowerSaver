@@ -59,6 +59,12 @@
             this.LastDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.SaveButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
+            this._PowerThrottleDetailLabel = new System.Windows.Forms.Label();
+            this._PowerThrottleDetailPanel = new System.Windows.Forms.Panel();
+            this.MinPowerThrottleNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.MaxPowerThrottleNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this._MinPowerThrottlePercentLabel = new System.Windows.Forms.Label();
+            this._MaxPowerThrottlePercentLabel = new System.Windows.Forms.Label();
             this._FooterButtonsSplitContainer.Panel1.SuspendLayout();
             this._FooterButtonsSplitContainer.Panel2.SuspendLayout();
             this._FooterButtonsSplitContainer.SuspendLayout();
@@ -72,6 +78,9 @@
             this.DetailTableLayoutPanel.SuspendLayout();
             this._ScheduleGroupBox.SuspendLayout();
             this._ScheduleTableLayoutPanel.SuspendLayout();
+            this._PowerThrottleDetailPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MinPowerThrottleNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MaxPowerThrottleNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // _FooterButtonsSplitContainer
@@ -94,8 +103,8 @@
             this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.SaveButton);
             this._FooterButtonsSplitContainer.Panel2.Controls.Add(this.ExitButton);
             this._FooterButtonsSplitContainer.Panel2MinSize = 40;
-            this._FooterButtonsSplitContainer.Size = new System.Drawing.Size(452, 468);
-            this._FooterButtonsSplitContainer.SplitterDistance = 427;
+            this._FooterButtonsSplitContainer.Size = new System.Drawing.Size(452, 498);
+            this._FooterButtonsSplitContainer.SplitterDistance = 457;
             this._FooterButtonsSplitContainer.SplitterWidth = 1;
             this._FooterButtonsSplitContainer.TabIndex = 0;
             // 
@@ -126,7 +135,7 @@
             this._DetailGroupBox.Controls.Add(this.DetailTableLayoutPanel);
             this._DetailGroupBox.Location = new System.Drawing.Point(12, 166);
             this._DetailGroupBox.Name = "_DetailGroupBox";
-            this._DetailGroupBox.Size = new System.Drawing.Size(428, 255);
+            this._DetailGroupBox.Size = new System.Drawing.Size(428, 280);
             this._DetailGroupBox.TabIndex = 1;
             this._DetailGroupBox.TabStop = false;
             this._DetailGroupBox.Text = "電源設定";
@@ -142,7 +151,7 @@
             this._ExtendTableLayoutPanel.Controls.Add(this._DimBrightnessLabel, 0, 2);
             this._ExtendTableLayoutPanel.Controls.Add(this._BrightnessPanel, 1, 1);
             this._ExtendTableLayoutPanel.Controls.Add(this._DimBrightnessPanel, 1, 2);
-            this._ExtendTableLayoutPanel.Location = new System.Drawing.Point(6, 171);
+            this._ExtendTableLayoutPanel.Location = new System.Drawing.Point(6, 196);
             this._ExtendTableLayoutPanel.Name = "_ExtendTableLayoutPanel";
             this._ExtendTableLayoutPanel.RowCount = 3;
             this._ExtendTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
@@ -224,6 +233,7 @@
             this.BrightnessNumericUpDown.Name = "BrightnessNumericUpDown";
             this.BrightnessNumericUpDown.Size = new System.Drawing.Size(184, 19);
             this.BrightnessNumericUpDown.TabIndex = 5;
+            this.BrightnessNumericUpDown.ValueChanged += new System.EventHandler(this.DetailNumericUpDown_ValueChanged);
             // 
             // _DimBrightnessPanel
             // 
@@ -251,11 +261,12 @@
             this.DimBrightnessNumericUpDown.Name = "DimBrightnessNumericUpDown";
             this.DimBrightnessNumericUpDown.Size = new System.Drawing.Size(184, 19);
             this.DimBrightnessNumericUpDown.TabIndex = 6;
+            this.DimBrightnessNumericUpDown.ValueChanged += new System.EventHandler(this.DetailNumericUpDown_ValueChanged);
             // 
             // _ExtendLabel
             // 
             this._ExtendLabel.AutoSize = true;
-            this._ExtendLabel.Location = new System.Drawing.Point(9, 156);
+            this._ExtendLabel.Location = new System.Drawing.Point(9, 181);
             this._ExtendLabel.Name = "_ExtendLabel";
             this._ExtendLabel.Size = new System.Drawing.Size(366, 12);
             this._ExtendLabel.TabIndex = 4;
@@ -276,15 +287,18 @@
             this.DetailTableLayoutPanel.Controls.Add(this.HibernationComboBox, 1, 3);
             this.DetailTableLayoutPanel.Controls.Add(this._PowerThrottleLabel, 0, 4);
             this.DetailTableLayoutPanel.Controls.Add(this.PowerThrottleComboBox, 1, 4);
+            this.DetailTableLayoutPanel.Controls.Add(this._PowerThrottleDetailLabel, 0, 5);
+            this.DetailTableLayoutPanel.Controls.Add(this._PowerThrottleDetailPanel, 1, 5);
             this.DetailTableLayoutPanel.Location = new System.Drawing.Point(6, 18);
             this.DetailTableLayoutPanel.Name = "DetailTableLayoutPanel";
-            this.DetailTableLayoutPanel.RowCount = 5;
+            this.DetailTableLayoutPanel.RowCount = 6;
+            this.DetailTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.DetailTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.DetailTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.DetailTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.DetailTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.DetailTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.DetailTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.DetailTableLayoutPanel.Size = new System.Drawing.Size(416, 130);
+            this.DetailTableLayoutPanel.Size = new System.Drawing.Size(416, 156);
             this.DetailTableLayoutPanel.TabIndex = 3;
             // 
             // _MonitorLabel
@@ -400,6 +414,7 @@
             this.PowerThrottleComboBox.Name = "PowerThrottleComboBox";
             this.PowerThrottleComboBox.Size = new System.Drawing.Size(210, 20);
             this.PowerThrottleComboBox.TabIndex = 9;
+            this.PowerThrottleComboBox.SelectedIndexChanged += new System.EventHandler(this.PowerThrottleDetailComboBox_SelectedIndexChanged);
             // 
             // _ScheduleGroupBox
             // 
@@ -506,11 +521,89 @@
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
+            // _PowerThrottleDetailLabel
+            // 
+            this._PowerThrottleDetailLabel.AutoSize = true;
+            this._PowerThrottleDetailLabel.Dock = System.Windows.Forms.DockStyle.Left;
+            this._PowerThrottleDetailLabel.Location = new System.Drawing.Point(3, 133);
+            this._PowerThrottleDetailLabel.Margin = new System.Windows.Forms.Padding(3);
+            this._PowerThrottleDetailLabel.Name = "_PowerThrottleDetailLabel";
+            this._PowerThrottleDetailLabel.Size = new System.Drawing.Size(181, 20);
+            this._PowerThrottleDetailLabel.TabIndex = 10;
+            this._PowerThrottleDetailLabel.Text = "プロセッサ調整の詳細 (Vista 以降)：";
+            this._PowerThrottleDetailLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // _PowerThrottleDetailPanel
+            // 
+            this._PowerThrottleDetailPanel.Controls.Add(this._MaxPowerThrottlePercentLabel);
+            this._PowerThrottleDetailPanel.Controls.Add(this._MinPowerThrottlePercentLabel);
+            this._PowerThrottleDetailPanel.Controls.Add(this.MaxPowerThrottleNumericUpDown);
+            this._PowerThrottleDetailPanel.Controls.Add(this.MinPowerThrottleNumericUpDown);
+            this._PowerThrottleDetailPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._PowerThrottleDetailPanel.Location = new System.Drawing.Point(203, 133);
+            this._PowerThrottleDetailPanel.Name = "_PowerThrottleDetailPanel";
+            this._PowerThrottleDetailPanel.Size = new System.Drawing.Size(210, 20);
+            this._PowerThrottleDetailPanel.TabIndex = 11;
+            // 
+            // MinPowerThrottleNumericUpDown
+            // 
+            this.MinPowerThrottleNumericUpDown.Location = new System.Drawing.Point(0, 1);
+            this.MinPowerThrottleNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.MinPowerThrottleNumericUpDown.Name = "MinPowerThrottleNumericUpDown";
+            this.MinPowerThrottleNumericUpDown.Size = new System.Drawing.Size(70, 19);
+            this.MinPowerThrottleNumericUpDown.TabIndex = 0;
+            this.MinPowerThrottleNumericUpDown.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.MinPowerThrottleNumericUpDown.ValueChanged += new System.EventHandler(this.PowerThrottleDetailNumericUpDown_ValueChanged);
+            // 
+            // MaxPowerThrottleNumericUpDown
+            // 
+            this.MaxPowerThrottleNumericUpDown.Location = new System.Drawing.Point(114, 0);
+            this.MaxPowerThrottleNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.MaxPowerThrottleNumericUpDown.Name = "MaxPowerThrottleNumericUpDown";
+            this.MaxPowerThrottleNumericUpDown.Size = new System.Drawing.Size(70, 19);
+            this.MaxPowerThrottleNumericUpDown.TabIndex = 1;
+            this.MaxPowerThrottleNumericUpDown.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.MaxPowerThrottleNumericUpDown.ValueChanged += new System.EventHandler(this.PowerThrottleDetailNumericUpDown_ValueChanged);
+            // 
+            // _MinPowerThrottlePercentLabel
+            // 
+            this._MinPowerThrottlePercentLabel.AutoSize = true;
+            this._MinPowerThrottlePercentLabel.Location = new System.Drawing.Point(76, 4);
+            this._MinPowerThrottlePercentLabel.Name = "_MinPowerThrottlePercentLabel";
+            this._MinPowerThrottlePercentLabel.Size = new System.Drawing.Size(33, 12);
+            this._MinPowerThrottlePercentLabel.TabIndex = 2;
+            this._MinPowerThrottlePercentLabel.Text = "％ －";
+            // 
+            // _MaxPowerThrottlePercentLabel
+            // 
+            this._MaxPowerThrottlePercentLabel.AutoSize = true;
+            this._MaxPowerThrottlePercentLabel.Location = new System.Drawing.Point(190, 4);
+            this._MaxPowerThrottlePercentLabel.Name = "_MaxPowerThrottlePercentLabel";
+            this._MaxPowerThrottlePercentLabel.Size = new System.Drawing.Size(17, 12);
+            this._MaxPowerThrottlePercentLabel.TabIndex = 3;
+            this._MaxPowerThrottlePercentLabel.Text = "％";
+            // 
             // ScheduleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(452, 468);
+            this.ClientSize = new System.Drawing.Size(452, 498);
             this.Controls.Add(this._FooterButtonsSplitContainer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -538,6 +631,10 @@
             this._ScheduleGroupBox.PerformLayout();
             this._ScheduleTableLayoutPanel.ResumeLayout(false);
             this._ScheduleTableLayoutPanel.PerformLayout();
+            this._PowerThrottleDetailPanel.ResumeLayout(false);
+            this._PowerThrottleDetailPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.MinPowerThrottleNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.MaxPowerThrottleNumericUpDown)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -580,5 +677,11 @@
         private System.Windows.Forms.NumericUpDown DimBrightnessNumericUpDown;
         private System.Windows.Forms.Label _PowerThrottleLabel;
         private System.Windows.Forms.ComboBox PowerThrottleComboBox;
+        private System.Windows.Forms.Label _PowerThrottleDetailLabel;
+        private System.Windows.Forms.Panel _PowerThrottleDetailPanel;
+        private System.Windows.Forms.NumericUpDown MinPowerThrottleNumericUpDown;
+        private System.Windows.Forms.Label _MaxPowerThrottlePercentLabel;
+        private System.Windows.Forms.Label _MinPowerThrottlePercentLabel;
+        private System.Windows.Forms.NumericUpDown MaxPowerThrottleNumericUpDown;
     }
 }

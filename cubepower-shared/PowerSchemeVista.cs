@@ -44,7 +44,6 @@ namespace CubePower {
                 if (elem.Value.Name == item.Name) {
                     bool status = true;
                     Guid scheme = elem.Key;
-                    KeyValuePair<uint, uint> throttle = this.GetProcessorThrottle((PowerThrottlePolicy)item.Policy.user.ThrottlePolicyAc);
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_TIMEOUT, item.Policy.user.VideoTimeoutAc);
                     status &= this.SetACValue(scheme, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
                     status &= this.SetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_STANDBY_TIMEOUT, item.Policy.user.IdleTimeoutAc);
@@ -52,8 +51,8 @@ namespace CubePower {
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT, item.DimTimeout);
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_BRIGHTNESS, item.Brightness);
                     status &= this.SetACValue(scheme, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_BRIGHTNESS, item.DimBrightness);
-                    status &= this.SetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN, throttle.Key);
-                    status &= this.SetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX, throttle.Value);
+                    status &= this.SetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN, item.MinThrottle);
+                    status &= this.SetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX, item.MaxThrottle);
 
                     return status;
                 }
@@ -78,7 +77,6 @@ namespace CubePower {
                 dest = (Guid)Marshal.PtrToStructure(dest_handle, typeof(Guid));
 
                 bool status = true;
-                KeyValuePair<uint, uint> throttle = this.GetProcessorThrottle((PowerThrottlePolicy)item.Policy.user.ThrottlePolicyAc);
                 status &= this.SetProfileName(dest, item.Name);
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_TIMEOUT, item.Policy.user.VideoTimeoutAc);
                 status &= this.SetACValue(dest, GUID_DISK_SUBGROUP, GUID_DISK_TIMEOUT, item.Policy.user.SpindownTimeoutAc);
@@ -87,8 +85,8 @@ namespace CubePower {
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_TIMEOUT, item.DimTimeout);
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_BRIGHTNESS, item.Brightness);
                 status &= this.SetACValue(dest, GUID_VIDEO_SUBGROUP, GUID_VIDEO_DIM_BRIGHTNESS, item.DimBrightness);
-                status &= this.SetACValue(dest, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN, throttle.Key);
-                status &= this.SetACValue(dest, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX, throttle.Value);
+                status &= this.SetACValue(dest, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN, item.MinThrottle);
+                status &= this.SetACValue(dest, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX, item.MaxThrottle);
 
                 if (!status) {
                     NativeMethods.PowerDeleteScheme(IntPtr.Zero, ref dest);
@@ -217,12 +215,11 @@ namespace CubePower {
                 policy.mach.DozeS4TimeoutAc = this.GetACValue(scheme, GUID_SLEEP_SUBGROUP, GUID_HIBERNATION_TIMEOUT);
 
                 // プロセッサ調整
-                uint min = this.GetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN);
-                uint max = this.GetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX);
-                if (max == 100 && min == 100) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_NONE;
-                else if (max == 100) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
-                else if (max > 50) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_CONSTANT;
-                else policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_DEGRADE;
+                item.MinThrottle = this.GetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MIN);
+                item.MaxThrottle = this.GetACValue(scheme, GUID_PROCESSOR_SUBGROUP, GUID_PROCESSOR_MAX);
+                if (item.MinThrottle == 100 && item.MaxThrottle == 100) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_NONE;
+                else if (item.MaxThrottle == 100) policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
+                else policy.user.ThrottlePolicyAc = (byte)PowerThrottlePolicy.PO_THROTTLE_CONSTANT;
 
                 item.Policy = policy;
 
@@ -244,17 +241,6 @@ namespace CubePower {
             StringBuilder name = new StringBuilder((int)size);
             NativeMethods.PowerReadFriendlyName(IntPtr.Zero, ref scheme, IntPtr.Zero, IntPtr.Zero, name, ref size);
             return name.ToString();
-        }
-
-        /* ----------------------------------------------------------------- */
-        /// GetProcessorThrottle
-        /* ----------------------------------------------------------------- */
-        private KeyValuePair<uint, uint> GetProcessorThrottle(PowerThrottlePolicy policy) {
-            if (policy == PowerThrottlePolicy.PO_THROTTLE_NONE) return new KeyValuePair<uint, uint>(100, 100);
-            else if (policy == PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE) return new KeyValuePair<uint, uint>(5, 100);
-            else if (policy == PowerThrottlePolicy.PO_THROTTLE_CONSTANT) return new KeyValuePair<uint, uint>(5, 75);
-            else if (policy == PowerThrottlePolicy.PO_THROTTLE_DEGRADE) return new KeyValuePair<uint, uint>(5, 50);
-            return new KeyValuePair<uint, uint>(5, 100);
         }
 
         /* ----------------------------------------------------------------- */

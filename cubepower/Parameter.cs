@@ -107,11 +107,23 @@ namespace CubePower {
         }
 
         public static int PowerThrottlePolicyToIndex(PowerThrottlePolicy id) {
-            return (int)id;
+            switch (id) {
+            case PowerThrottlePolicy.PO_THROTTLE_NONE: return 0;
+            case PowerThrottlePolicy.PO_THROTTLE_CONSTANT: return 1;
+            case PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE: return 2;
+            default: break;
+            }
+            return 2;
         }
 
         public static PowerThrottlePolicy IndexToPowerThrottlePolicy(int index) {
-            return (PowerThrottlePolicy)index;
+            switch (index) {
+            case 0: return PowerThrottlePolicy.PO_THROTTLE_NONE;
+            case 1: return PowerThrottlePolicy.PO_THROTTLE_CONSTANT;
+            case 2: return PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
+            default: break;
+            }
+            return PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE;
         }
     }
     
@@ -143,10 +155,10 @@ namespace CubePower {
 
         public static string PowerThrottlePolicyString(PowerThrottlePolicy id) {
             switch (id) {
-            case PowerThrottlePolicy.PO_THROTTLE_NONE: return "NONE";
-            case PowerThrottlePolicy.PO_THROTTLE_CONSTANT: return "CONSTANT";
-            case PowerThrottlePolicy.PO_THROTTLE_DEGRADE: return "DEGRADE";
-            case PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE: return "ADAPTIVE";
+            case PowerThrottlePolicy.PO_THROTTLE_NONE: return "最大のパフォーマンス";
+            case PowerThrottlePolicy.PO_THROTTLE_CONSTANT: return "最小のパフォーマンス";
+            case PowerThrottlePolicy.PO_THROTTLE_DEGRADE: return "バッテリの低下に応じる";
+            case PowerThrottlePolicy.PO_THROTTLE_ADAPTIVE: return "パフォーマンスを動的に変更";
             default: break;
             }
             return "不明";
