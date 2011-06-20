@@ -218,6 +218,7 @@ namespace CubePower {
                 this.ScheduleListView.Items.Remove(item);
                 this._status = CloseStatus.Confirm;
             }
+            this.ValidateSchedule();
             this.ScheduleListView.EndUpdate();
         }
 
@@ -348,7 +349,11 @@ namespace CubePower {
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout)));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout)));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout)));
-                item.SubItems.Add(Appearance.PowerThrottlePolicyString(value.ACValues.ThrottlePolicy));
+                if (Environment.OSVersion.Version.Major > 5) {
+                    string description = String.Format("{0}% - {1}%", value.ACValues.MinThrottle, value.ACValues.MaxThrottle);
+                    item.SubItems.Add(description);
+                }
+                else item.SubItems.Add(Appearance.PowerThrottlePolicyString(value.ACValues.ThrottlePolicy));
                 item.SubItems.Add(Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DimTimeout)));
                 item.SubItems.Add(value.ACValues.Brightness + "%");
                 item.SubItems.Add(value.ACValues.DimBrightness + "%");
@@ -369,10 +374,14 @@ namespace CubePower {
                 dest.SubItems[3].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DiskTimeout));
                 dest.SubItems[4].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.StandByTimeout));
                 dest.SubItems[5].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.HibernationTimeout));
-                dest.SubItems[6].Text = Appearance.PowerThrottlePolicyString(value.ACValues.ThrottlePolicy);
+                if (Environment.OSVersion.Version.Major > 5) {
+                    dest.SubItems[6].Text =String.Format("{0}% - {1}%", value.ACValues.MinThrottle, value.ACValues.MaxThrottle);
+                }
+                else dest.SubItems[6].Text = Appearance.PowerThrottlePolicyString(value.ACValues.ThrottlePolicy);
                 dest.SubItems[7].Text = Appearance.ExpireTypeString(Translator.SecondToExpireType(value.ACValues.DimTimeout));
                 dest.SubItems[8].Text = value.ACValues.Brightness + "%";
                 dest.SubItems[9].Text = value.ACValues.DimBrightness + "%";
+                this.ScheduleListView.Sort();
                 this.ValidateSchedule();
             }
         }
@@ -400,7 +409,8 @@ namespace CubePower {
                     }
 
                     if (key != DEFAULT_SETTING_NAME) {
-                        for (int j = i + 1; j < this.ScheduleListView.Items.Count; j++) {
+                        for (int j = (sched.First > sched.Last) ? 0 : i + 1; j < this.ScheduleListView.Items.Count; j++) {
+                            if (i == j) continue;
                             if (this.ScheduleListView.Items[j].Text == DEFAULT_SETTING_NAME) continue;
                             if (!this._schedule.ContainsKey(this.ScheduleListView.Items[j].Text)) continue;
                             ScheduleItem compared = this._schedule[this.ScheduleListView.Items[j].Text];
@@ -546,7 +556,7 @@ namespace CubePower {
         /* ----------------------------------------------------------------- */
         #region variables
         private UserSetting _setting = new UserSetting();
-        private Dictionary<string, ScheduleItem> _schedule = new Dictionary<string, ScheduleItem>();
+        private SortedDictionary<string, ScheduleItem> _schedule = new SortedDictionary<string, ScheduleItem>();
         private CloseStatus _status = CloseStatus.Cancel;
         #endregion
 

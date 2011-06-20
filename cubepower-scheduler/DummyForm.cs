@@ -10,6 +10,8 @@ namespace CubePower {
     public partial class DummyForm : Form {
         public DummyForm() {
             InitializeComponent();
+            var edition = (IntPtr.Size == 4) ? "x86" : "x64";
+            this.MainNotifyIcon.Text = String.Format("CubePowerSaver\nVersion: {0} ({1})", this._scheduler.Version, edition);
 
             this._worker = new BackgroundWorker();
             this._worker.WorkerSupportsCancellation = true;
@@ -55,8 +57,7 @@ namespace CubePower {
         private Scheduler _scheduler = new Scheduler();
 
         private void VersionToolStripMenuItem_Click(object sender, EventArgs e) {
-            UserSetting setting = new UserSetting();
-            VersionDialog dialog = new VersionDialog(setting.Version);
+            VersionDialog dialog = new VersionDialog(this._scheduler.Version);
             dialog.ShowDialog(this);
         }
     }

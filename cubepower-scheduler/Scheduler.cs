@@ -11,14 +11,32 @@ namespace CubePower {
             if (System.IO.File.Exists(path)) this._setting.Load(path);
         }
 
+        public string Version {
+            get { return this._setting.Version; }
+        }
+
         public void Execute() {
             this.Update(this._setting.DefaultSetting);
+            if (this._setting.Schedule.Count <= 0) return;
 
-            int index = 0;
+            // NOTE: 最後のスケジュールは 21:00 ～ 09:00 のように次の日に跨ぐ
+            // 設定になる可能性があるので，その時間帯に該当するかどうかを
+            // メインループに入る前に確認する．
+            int index = this._setting.Schedule.Count - 1;
+            DateTime now = DateTime.Now;
+            DateTime first = DateTime.Parse(this._setting.Schedule[index].First.ToString("HH:mm"));
+            DateTime last = DateTime.Parse(this._setting.Schedule[index].Last.ToString("HH:mm"));
+            if (first > last && now < last) {
+                this.Update(this._setting.Schedule[index]);
+                this.Sleep(last);
+                this.Update(this._setting.DefaultSetting);
+            }
+
+            index = 0;
             while (this._setting.Schedule.Count > 0) {
-                DateTime now   = DateTime.Now;
-                DateTime first = DateTime.Parse(this._setting.Schedule[index].First.ToString("HH:mm"));
-                DateTime last  = DateTime.Parse(this._setting.Schedule[index].Last.ToString("HH:mm"));
+                now   = DateTime.Now;
+                first = DateTime.Parse(this._setting.Schedule[index].First.ToString("HH:mm"));
+                last  = DateTime.Parse(this._setting.Schedule[index].Last.ToString("HH:mm"));
                 if (first > last) last = last.AddDays(1);
 
                 if (now > first && now > last) {
@@ -68,6 +86,8 @@ namespace CubePower {
             elem.DimTimeout = item.ACValues.DimTimeout;
             elem.Brightness = item.ACValues.Brightness;
             elem.DimBrightness = item.ACValues.DimBrightness;
+            elem.MinThrottle = item.ACValues.MinThrottle;
+            elem.MaxThrottle = item.ACValues.MaxThrottle;
 
             bool status = true;
             if (this._setting.Scheme.Find(CUBEPOWER_PROFILENAME) == null) status &= this._setting.Scheme.Add(elem);

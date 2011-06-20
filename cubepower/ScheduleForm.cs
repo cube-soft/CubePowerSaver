@@ -324,6 +324,8 @@ namespace CubePower {
             this.HibernationComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.HibernationTimeout));
             this.PowerThrottleComboBox.SelectedIndex = Translator.PowerThrottlePolicyToIndex(src.ThrottlePolicy);
+            this.MinPowerThrottleNumericUpDown.Value = src.MinThrottle;
+            this.MaxPowerThrottleNumericUpDown.Value = src.MaxThrottle;
             this.DimComboBox.SelectedIndex = Translator.ExpireTypeToIndex(
                 Translator.SecondToExpireType(src.DimTimeout));
             this.BrightnessNumericUpDown.Value = src.Brightness;
@@ -350,6 +352,8 @@ namespace CubePower {
                 Translator.IndexToExpireType(this.HibernationComboBox.SelectedIndex));
             dest.ThrottlePolicy = Translator.IndexToPowerThrottlePolicy(
                 this.PowerThrottleComboBox.SelectedIndex);
+            dest.MinThrottle = (uint)this.MinPowerThrottleNumericUpDown.Value;
+            dest.MaxThrottle = (uint)this.MaxPowerThrottleNumericUpDown.Value;
             dest.DimTimeout = Translator.ExpireTypeToSecond(
                 Translator.IndexToExpireType(this.DimComboBox.SelectedIndex));
             dest.Brightness = (uint)this.BrightnessNumericUpDown.Value;
